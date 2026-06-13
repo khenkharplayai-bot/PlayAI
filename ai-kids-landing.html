@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Kids – KI lernen. KI verstehen. KI gestalten.</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #0f0c29;
+    --bg-mid: #1a0a3e;
+    --purple-core: #7c3aed;
+    --purple-light: #a78bfa;
+    --teal: #06b6d4;
+    --gold: #f59e0b;
+    --green: #10b981;
+    --pink: #ec4899;
+    --white: #f8fafc;
+    --muted: #94a3b8;
+    --card-bg: rgba(255,255,255,0.04);
+    --card-border: rgba(167,139,250,0.2);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Nunito',sans-serif;
+    background:var(--bg-deep);
+    color:var(--white);
+    overflow-x:hidden;
+  }
+  body::before {
+    content:'';position:fixed;top:-20%;left:-10%;width:60%;height:60%;
+    background:radial-gradient(circle,rgba(124,58,237,0.15)0%,transparent 70%);
+    pointer-events:none;animation:float1 12s ease-in-out infinite;
+  }
+  body::after {
+    content:'';position:fixed;bottom:-20%;right:-10%;width:50%;height:50%;
+    background:radial-gradient(circle,rgba(6,182,212,0.1)0%,transparent 70%);
+    pointer-events:none;animation:float2 15s ease-in-out infinite;
+  }
+  @keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(3%,5%)}}
+  @keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-3%,-4%)}}
+
+  /* NAV */
+  nav {
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    padding:16px 40px;display:flex;align-items:center;justify-content:space-between;
+    background:rgba(15,12,41,0.85);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--card-border);
+  }
+  .nav-logo { font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.4rem;letter-spacing:-0.5px; }
+  .nav-logo span { color:var(--purple-light); }
+  .nav-links { display:flex;gap:32px;list-style:none; }
+  .nav-links a { color:var(--muted);text-decoration:none;font-size:0.95rem;font-weight:600;transition:color 0.2s; }
+  .nav-links a:hover { color:var(--white); }
+  .nav-cta {
+    background:var(--purple-core);color:var(--white);border:none;
+    padding:10px 24px;border-radius:50px;font-family:'Nunito',sans-serif;
+    font-weight:800;font-size:0.9rem;cursor:pointer;transition:all 0.2s;
+  }
+  .nav-cta:hover { background:#6d28d9;transform:translateY(-1px); }
+
+  /* TOGGLE */
+  .toggle-wrap { display:flex;justify-content:center;padding:100px 20px 0; }
+  .toggle-pill {
+    display:inline-flex;background:rgba(255,255,255,0.06);
+    border:1px solid var(--card-border);border-radius:50px;padding:4px;gap:4px;
+  }
+  .toggle-pill button {
+    padding:8px 28px;border-radius:50px;border:none;
+    font-family:'Nunito',sans-serif;font-weight:700;font-size:0.9rem;
+    cursor:pointer;transition:all 0.25s;color:var(--muted);background:transparent;
+  }
+  .toggle-pill button.active { background:var(--purple-core);color:var(--white); }
+
+  /* HERO */
+  .hero {
+    min-height:90vh;display:flex;align-items:center;justify-content:center;
+    text-align:center;padding:60px 24px 60px;position:relative;
+  }
+  .hero-inner { max-width:800px; }
+  .hero-eyebrow {
+    display:inline-block;background:rgba(124,58,237,0.15);
+    border:1px solid rgba(167,139,250,0.3);color:var(--purple-light);
+    font-size:0.8rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+    padding:6px 18px;border-radius:50px;margin-bottom:28px;
+  }
+
+  /* COZMO SVG AVATAR */
+  .cozmo-img {
+    width:220px;height:220px;object-fit:contain;
+    margin:0 auto 28px;display:block;
+    background:transparent;
+    animation:bob 4s ease-in-out infinite;
+    filter:drop-shadow(0 0 32px rgba(124,58,237,0.6));
+  }
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+  .hero h1 {
+    font-family:'Space Grotesk',sans-serif;font-size:clamp(2.2rem,5.5vw,3.8rem);
+    font-weight:700;line-height:1.15;margin-bottom:20px;letter-spacing:-1px;
+  }
+  .hero h1 em { font-style:normal;color:var(--purple-light); }
+  .hero-sub {
+    font-size:1.1rem;color:var(--muted);max-width:540px;
+    margin:0 auto 40px;line-height:1.7;
+  }
+  .hero-btns { display:flex;gap:16px;justify-content:center;flex-wrap:wrap; }
+  .btn-primary {
+    background:var(--purple-core);color:var(--white);padding:16px 36px;
+    border-radius:50px;font-weight:800;font-size:1rem;text-decoration:none;
+    display:inline-block;transition:all 0.25s;
+    box-shadow:0 4px 24px rgba(124,58,237,0.4);
+  }
+  .btn-primary:hover { background:#6d28d9;transform:translateY(-2px);box-shadow:0 8px 32px rgba(124,58,237,0.5); }
+  .btn-ghost {
+    color:var(--purple-light);padding:16px 36px;border-radius:50px;
+    font-weight:700;font-size:1rem;text-decoration:none;display:inline-block;
+    border:1px solid rgba(167,139,250,0.4);transition:all 0.25s;
+  }
+  .btn-ghost:hover { border-color:var(--purple-light);background:rgba(167,139,250,0.1); }
+
+  /* TAGLINE */
+  .tagline-strip { text-align:center;padding:48px 24px; }
+  .tagline-strip h2 {
+    font-family:'Space Grotesk',sans-serif;font-size:clamp(1.2rem,2.8vw,1.9rem);
+    font-weight:500;color:var(--muted);letter-spacing:1px;
+  }
+  .tagline-strip h2 strong { color:var(--white);font-weight:700; }
+
+  /* SECTIONS */
+  .section { padding:80px 24px;max-width:1200px;margin:0 auto; }
+  .section-title { text-align:center;margin-bottom:52px; }
+  .section-title h2 {
+    font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3.5vw,2.6rem);
+    font-weight:700;margin-bottom:12px;
+  }
+  .section-title h2 span { color:var(--purple-light); }
+  .section-title p { color:var(--muted);font-size:1rem;max-width:480px;margin:0 auto;line-height:1.7; }
+
+  /* MODULE CARDS */
+  .modules-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px; }
+  .module-card {
+    background:var(--card-bg);border:1px solid var(--card-border);
+    border-radius:20px;padding:26px;transition:all 0.3s;position:relative;overflow:hidden;
+  }
+  .module-card::before {
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:20px 20px 0 0;
+  }
+  .module-card:hover { transform:translateY(-4px);border-color:rgba(167,139,250,0.4);background:rgba(255,255,255,0.07); }
+  .m1::before{background:linear-gradient(90deg,#7c3aed,#a78bfa)}
+  .m2::before{background:linear-gradient(90deg,#ec4899,#f472b6)}
+  .m3::before{background:linear-gradient(90deg,#06b6d4,#22d3ee)}
+  .m4::before{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+  .m5::before{background:linear-gradient(90deg,#10b981,#34d399)}
+  .m6::before{background:linear-gradient(90deg,#06b6d4,#818cf8)}
+  .m7::before{background:linear-gradient(90deg,#f59e0b,#f97316)}
+  .module-icon { font-size:1.9rem;margin-bottom:12px; }
+  .module-card h3 { font-weight:800;font-size:1rem;margin-bottom:6px; }
+  .module-card p { color:var(--muted);font-size:0.86rem;line-height:1.6;margin-bottom:14px; }
+  .module-tag {
+    display:inline-block;padding:3px 12px;border-radius:50px;
+    font-size:0.74rem;font-weight:700;
+  }
+  .ts{background:rgba(124,58,237,0.2);color:#a78bfa}
+  .tl{background:rgba(236,72,153,0.2);color:#f472b6}
+  .tc{background:rgba(6,182,212,0.2);color:#22d3ee}
+  .tk{background:rgba(245,158,11,0.2);color:#fbbf24}
+  .tr{background:rgba(16,185,129,0.2);color:#34d399}
+  .tf{background:rgba(6,182,212,0.2);color:#22d3ee}
+  .th{background:rgba(245,158,11,0.2);color:#f97316}
+
+  /* SOKRATES */
+  .sokrates-outer { padding:0 24px 80px; }
+  .sokrates-band {
+    background:linear-gradient(135deg,rgba(124,58,237,0.12)0%,rgba(6,182,212,0.08)100%);
+    border:1px solid rgba(167,139,250,0.25);border-radius:24px;
+    padding:56px 48px;text-align:center;max-width:1152px;margin:0 auto;
+  }
+  .sok-badge {
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(124,58,237,0.2);border:1px solid rgba(167,139,250,0.3);
+    color:var(--purple-light);padding:6px 18px;border-radius:50px;
+    font-size:0.8rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:24px;
+  }
+  .sokrates-band h2 {
+    font-family:'Space Grotesk',sans-serif;font-size:clamp(1.4rem,3vw,2.2rem);
+    font-weight:700;line-height:1.3;margin-bottom:16px;max-width:680px;margin-left:auto;margin-right:auto;
+  }
+  .sokrates-band h2 em { font-style:normal;color:var(--purple-light); }
+  .sokrates-band p { color:var(--muted);font-size:1rem;max-width:540px;margin:0 auto;line-height:1.7; }
+
+  /* PRICING */
+  .pricing-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:24px;max-width:960px;margin:0 auto; }
+  .pricing-card {
+    background:var(--card-bg);border:1px solid var(--card-border);
+    border-radius:24px;padding:36px 30px;position:relative;transition:all 0.3s;
+  }
+  .pricing-card:hover { transform:translateY(-4px); }
+  .pricing-card.featured { background:rgba(124,58,237,0.12);border-color:var(--purple-core);box-shadow:0 0 40px rgba(124,58,237,0.2); }
+  .feat-badge {
+    position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+    background:var(--purple-core);color:var(--white);
+    font-size:0.75rem;font-weight:800;padding:4px 18px;border-radius:50px;white-space:nowrap;
+  }
+  .p-icon { font-size:2rem;margin-bottom:12px; }
+  .p-name { font-weight:800;font-size:1.05rem;margin-bottom:8px; }
+  .p-price { font-family:'Space Grotesk',sans-serif;font-size:2.8rem;font-weight:700;color:var(--purple-light);margin-bottom:4px; }
+  .p-period { color:var(--muted);font-size:0.85rem;margin-bottom:28px; }
+  .p-features { list-style:none;margin-bottom:32px; }
+  .p-features li { display:flex;align-items:center;gap:10px;color:var(--muted);font-size:0.88rem;margin-bottom:10px; }
+  .p-features li .ck { color:var(--green);font-size:1rem; }
+  .p-btn { display:block;width:100%;text-align:center;padding:14px;border-radius:50px;font-weight:800;font-size:0.95rem;cursor:pointer;transition:all 0.25s;text-decoration:none; }
+  .p-btn-fill { background:var(--purple-core);color:var(--white);border:none; }
+  .p-btn-fill:hover { background:#6d28d9; }
+  .p-btn-out { background:transparent;color:var(--purple-light);border:1px solid rgba(167,139,250,0.4); }
+  .p-btn-out:hover { background:rgba(167,139,250,0.1); }
+  .trust-strip { text-align:center;color:var(--muted);font-size:0.84rem;margin-top:24px;display:flex;align-items:center;justify-content:center;gap:8px; }
+
+  /* B2B */
+  .b2b-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px; }
+  .b2b-card { background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:30px;transition:all 0.3s; }
+  .b2b-card:hover { transform:translateY(-4px);border-color:rgba(167,139,250,0.4); }
+  .b2b-card .icon { font-size:2.1rem;margin-bottom:14px; }
+  .b2b-card h3 { font-weight:800;font-size:1.05rem;margin-bottom:8px; }
+  .b2b-card p { color:var(--muted);font-size:0.88rem;line-height:1.6; }
+
+  /* VISIBILITY */
+  .b2b-only { display:none; }
+  .b2b-only.show { display:block; }
+  .b2c-only { display:block; }
+  .b2c-only.hide { display:none; }
+
+  /* FOOTER */
+  footer { border-top:1px solid var(--card-border);padding:40px 24px;text-align:center;color:var(--muted);font-size:0.85rem; }
+  footer strong { color:var(--purple-light); }
+  .footer-links { display:flex;gap:24px;justify-content:center;margin-bottom:14px;flex-wrap:wrap; }
+  .footer-links a { color:var(--muted);text-decoration:none; }
+  .footer-links a:hover { color:var(--white); }
+
+  @media(max-width:768px){
+    nav{padding:14px 20px}
+    .nav-links{display:none}
+    .hero{padding:80px 20px 40px}
+    .sokrates-band{padding:36px 20px}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">AI<span>-Kids</span></div>
+  <ul class="nav-links">
+    <li><a href="#module">Module</a></li>
+    <li><a href="#prinzip">Cozmo</a></li>
+    <li><a href="#preise">Preise</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('preise').scrollIntoView({behavior:'smooth'})">Kostenlos starten</button>
+</nav>
+
+<div class="toggle-wrap">
+  <div class="toggle-pill">
+    <button class="active" id="btn-b2c" onclick="switchMode('b2c')">Für Eltern</button>
+    <button id="btn-b2b" onclick="switchMode('b2b')">Für Schulen</button>
+  </div>
+</div>
+
+<!-- HERO B2C -->
+<div id="hero-b2c" class="b2c-only">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">🤖 KI-Lernbegleiter für Kinder</div>
+
+      <img src="cozmo.png" alt="Cozmo" class="cozmo-img">
+
+      <h1>Hallo, ich bin <em>Cozmo</em> – dein KI-Lernfreund</h1>
+      <p class="hero-sub">Kein gewöhnlicher Chatbot – ich stelle Fragen, damit dein Kind wirklich selbst denkt, versteht und wächst. Das Sokrates-Prinzip trifft auf KI.</p>
+      <div class="hero-btns">
+        <a href="#preise" class="btn-primary">Jetzt kostenlos starten</a>
+        <a href="#prinzip" class="btn-ghost">Wie funktioniert das?</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO B2B -->
+<div id="hero-b2b" class="b2b-only">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">🏫 PlayAI für Bildungseinrichtungen</div>
+      <div style="font-size:4rem;margin:32px auto 28px">🎓</div>
+      <h1>KI-Kompetenz für die <em>Schule von morgen</em></h1>
+      <p class="hero-sub">Wir trainieren Schüler, ihre Kreativität und Lösungskompetenz mit KI massiv zu steigern. DSGVO-konform, pädagogisch fundiert, einsatzbereit.</p>
+      <div class="hero-btns">
+        <a href="mailto:hello@playai.de" class="btn-primary">Beratungsgespräch anfragen</a>
+        <a href="#b2b-section" class="btn-ghost">Leistungsübersicht</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAGLINE -->
+<div class="tagline-strip">
+  <h2><strong>KI nutzen.</strong> &nbsp; <strong>KI verstehen.</strong> &nbsp; <strong>KI gestalten.</strong></h2>
+</div>
+
+<!-- MODULE SECTION -->
+<section id="module" class="section">
+  <div class="section-title">
+    <h2>7 Module – <span>ein Begleiter</span></h2>
+    <p>Cozmo begleitet dein Kind durch alle Lernbereiche – spielerisch, geduldig, individuell.</p>
+  </div>
+  <div class="modules-grid">
+    <div class="module-card m1">
+      <div class="module-icon">📚</div>
+      <h3>Lern-Buddy</h3>
+      <p>Schulthemen spielerisch verstehen – von Mathe bis Geschichte.</p>
+      <span class="module-tag ts">Schule</span>
+    </div>
+    <div class="module-card m2">
+      <div class="module-icon">🧠</div>
+      <h3>Denk-Trainer</h3>
+      <p>Logik & Kreativität trainieren durch clevere Rätsel und Herausforderungen.</p>
+      <span class="module-tag tl">Logik</span>
+    </div>
+    <div class="module-card m3">
+      <div class="module-icon">&lt;/&gt;</div>
+      <h3>Code-Kids</h3>
+      <p>Programmieren lernen – spielerisch ab 6 Jahren, von Scratch bis Python-Basics.</p>
+      <span class="module-tag tc">Coding</span>
+    </div>
+    <div class="module-card m4">
+      <div class="module-icon">🎨</div>
+      <h3>Kreativ-Lab</h3>
+      <p>Schreiben, erfinden, gestalten – mit KI als kreativer Sparringspartner.</p>
+      <span class="module-tag tk">Kreativ</span>
+    </div>
+    <div class="module-card m5">
+      <div class="module-icon">🧩</div>
+      <h3>Löse-Arena</h3>
+      <p>Knifflige Rätsel & Challenges – Problemlösung als Abenteuer.</p>
+      <span class="module-tag tr">Rätsel</span>
+    </div>
+    <div class="module-card m6">
+      <div class="module-icon">🎯</div>
+      <h3>Fokus-Lab</h3>
+      <p>Konzentration & Achtsamkeit – Lernzeit optimieren, Ablenkung reduzieren.</p>
+      <span class="module-tag tf">Fokus</span>
+    </div>
+    <div class="module-card m7">
+      <div class="module-icon">✏️</div>
+      <h3>Hausaufgaben-Held</h3>
+      <p>Mit Cozmo, nicht abschreiben – echtes Verstehen statt Copy-Paste.</p>
+      <span class="module-tag th">Hausaufgaben</span>
+    </div>
+  </div>
+</section>
+
+<!-- SOKRATES -->
+<div id="prinzip" class="sokrates-outer">
+  <div class="sokrates-band">
+    <div class="sok-badge">💡 Das Sokrates-Prinzip</div>
+    <h2>Cozmo gibt keine <em>Antworten</em> – er stellt die richtigen <em>Fragen</em></h2>
+    <p>Statt Lösungen zu liefern führt Cozmo Kinder durch Fragen zum eigenen Verständnis. So entsteht echtes Wissen – kein kurzfristiges Auswendiglernen.</p>
+  </div>
+</div>
+
+<!-- B2B FEATURES -->
+<section id="b2b-section" class="section b2b-only">
+  <div class="section-title">
+    <h2>Für <span>Schulen & Institutionen</span></h2>
+    <p>PlayAI bietet Schulen eine vollständige KI-Lernplattform – DSGVO-konform auf deutschen Servern.</p>
+  </div>
+  <div class="b2b-grid">
+    <div class="b2b-card">
+      <div class="icon">🏫</div>
+      <h3>Klassenraumintegration</h3>
+      <p>Nahtlose Einbindung in bestehende Lernumgebungen. Lehrerübersicht, Lernfortschritt-Tracking, Klassenverwaltung.</p>
+    </div>
+    <div class="b2b-card">
+      <div class="icon">🛡️</div>
+      <h3>DSGVO-konform</h3>
+      <p>Alle Daten auf deutschen Servern (Frankfurt). Kein Tracking, keine Werbung, vollständige Datensouveränität.</p>
+    </div>
+    <div class="b2b-card">
+      <div class="icon">📊</div>
+      <h3>Lehreranalysen</h3>
+      <p>Detaillierte Einblicke in Lernfortschritte. Schwachstellen früh erkennen, individuelle Förderung planen.</p>
+    </div>
+    <div class="b2b-card">
+      <div class="icon">🎓</div>
+      <h3>Pädagogisches Konzept</h3>
+      <p>Entwickelt mit Bildungsexperten. Lehrplan-aligniert für alle Bundesländer, Klassen 1–10.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING (B2C) -->
+<section id="preise" class="section b2c-only">
+  <div class="section-title">
+    <h2>Welchen Plan für <span>dein Kind</span>?</h2>
+    <p>Du kannst jederzeit upgraden oder kündigen.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="p-icon">🎁</div>
+      <div class="p-name">Free</div>
+      <div class="p-price">0€</div>
+      <div class="p-period">für immer</div>
+      <ul class="p-features">
+        <li><span class="ck">✓</span> 1 Kind-Profil</li>
+        <li><span class="ck">✓</span> Alle Module (begrenzt)</li>
+        <li><span class="ck">✓</span> 10 Fragen/Tag</li>
+      </ul>
+      <a href="#" class="p-btn p-btn-out">Free starten</a>
+    </div>
+    <div class="pricing-card featured">
+      <div class="feat-badge">✨ Empfohlen</div>
+      <div class="p-icon">⭐</div>
+      <div class="p-name">Pro</div>
+      <div class="p-price">9,99€</div>
+      <div class="p-period">pro Monat</div>
+      <ul class="p-features">
+        <li><span class="ck">✓</span> 1 Kind-Profil</li>
+        <li><span class="ck">✓</span> Alle Module unlimitiert</li>
+        <li><span class="ck">✓</span> Lernstatistiken</li>
+        <li><span class="ck">✓</span> Eltern-Dashboard</li>
+      </ul>
+      <a href="#" class="p-btn p-btn-fill">Pro wählen</a>
+    </div>
+    <div class="pricing-card">
+      <div class="p-icon">👨‍👩‍👧‍👦</div>
+      <div class="p-name">Family</div>
+      <div class="p-price">14,99€</div>
+      <div class="p-period">pro Monat</div>
+      <ul class="p-features">
+        <li><span class="ck">✓</span> Bis zu 4 Kinder</li>
+        <li><span class="ck">✓</span> Alle Module unlimitiert</li>
+        <li><span class="ck">✓</span> Individuelle Profile</li>
+        <li><span class="ck">✓</span> Priorität-Support</li>
+      </ul>
+      <a href="#" class="p-btn p-btn-out">Family wählen</a>
+    </div>
+  </div>
+  <div class="trust-strip">🔒 Sicher bezahlen &nbsp;·&nbsp; Jederzeit kündbar &nbsp;·&nbsp; Keine versteckten Kosten</div>
+</section>
+
+<footer>
+  <div class="footer-links">
+    <a href="#">Impressum</a>
+    <a href="#">Datenschutz</a>
+    <a href="#">AGB</a>
+    <a href="#">Kontakt</a>
+  </div>
+  <p>© 2025 <strong>PlayAI GmbH</strong> · AI-Kids ist ein Produkt von PlayAI · Made with ❤️ in Germany</p>
+</footer>
+
+<script>
+function switchMode(mode) {
+  var b2cEls = document.querySelectorAll('.b2c-only');
+  var b2bEls = document.querySelectorAll('.b2b-only');
+  var btnB2c = document.getElementById('btn-b2c');
+  var btnB2b = document.getElementById('btn-b2b');
+  if (mode === 'b2b') {
+    btnB2c.classList.remove('active');
+    btnB2b.classList.add('active');
+    b2cEls.forEach(function(el){ el.classList.add('hide'); });
+    b2bEls.forEach(function(el){ el.classList.add('show'); });
+  } else {
+    btnB2b.classList.remove('active');
+    btnB2c.classList.add('active');
+    b2cEls.forEach(function(el){ el.classList.remove('hide'); });
+    b2bEls.forEach(function(el){ el.classList.remove('show'); });
+  }
+}
+</script>
+</body>
+</html>
