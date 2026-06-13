@@ -15,6 +15,9 @@ STRIPE_FREE_PRICE_ID = os.getenv("STRIPE_FREE_PRICE_ID")
 STRIPE_PRO_PRICE_ID = os.getenv("STRIPE_PRO_PRICE_ID")
 STRIPE_FAMILY_PRICE_ID = os.getenv("STRIPE_FAMILY_PRICE_ID")
 
+AIKIDS_LOGO = "https://raw.githubusercontent.com/khenkharplayai-bot/PlayAI/main/Bildschirmfoto%202023-12-04%20um%2022.02.12.png"
+PLAYAI_LOGO = "https://raw.githubusercontent.com/khenkharplayai-bot/PlayAI/main/playai_logo_xs_web%20Kopie.jpg"
+
 supabase_admin = create_client(
     os.getenv("SUPABASE_URL"),
     os.getenv("SUPABASE_SECRET_KEY")
@@ -128,7 +131,6 @@ def can_add_child(user_id):
     return count < limit, subscription, limit, count
 
 def is_new_user(user_id):
-    """Prüft ob der User noch kein Kind hat → Onboarding nötig"""
     count = get_children_count(user_id)
     return count == 0
 
@@ -198,6 +200,11 @@ def render_steps(current_step):
 def show_onboarding():
     step = st.session_state.onboarding_step
 
+    # Logo oben
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.image(AIKIDS_LOGO, width=100)
+
     st.markdown("<br>", unsafe_allow_html=True)
     render_steps(step)
     st.markdown("<br>", unsafe_allow_html=True)
@@ -250,7 +257,6 @@ def show_onboarding():
         with col2:
             if st.button("Weiter →", use_container_width=True):
                 if name.strip():
-                    # Kind in DB speichern
                     new_child = supabase_admin.table("children").insert({
                         "parent_id": st.session_state.user.id,
                         "name": name.strip(),
@@ -286,7 +292,6 @@ def show_onboarding():
             </div>
             """, unsafe_allow_html=True)
             if st.button("Free starten", use_container_width=True, key="plan_free"):
-                # Free Plan → direkt in den Chat
                 st.session_state.page = "chat"
                 st.session_state.messages = []
                 st.session_state.session_id = None
@@ -347,7 +352,6 @@ def show_onboarding():
         col1, _ = st.columns([1, 3])
         with col1:
             if st.button("← Zurück"):
-                # Kind wieder löschen wenn zurück
                 if st.session_state.child:
                     supabase_admin.table("children").delete().eq("id", st.session_state.child["id"]).execute()
                     st.session_state.child = None
@@ -356,8 +360,13 @@ def show_onboarding():
 
 # ── LOGIN / REGISTRIERUNG ──────────────────────────────────────
 def show_auth():
-    st.title("🤖 AI-Kids")
-    st.markdown("### Eltern-Bereich")
+    # Logo zentriert
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.image(AIKIDS_LOGO, width=120)
+
+    st.markdown("<h1 style='text-align:center;color:#a855f7;margin-top:0.5rem'>AI-Kids</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center;color:#9ca3af;margin-top:-0.5rem'>Eltern-Bereich</p>", unsafe_allow_html=True)
     st.divider()
 
     tab1, tab2 = st.tabs(["Anmelden", "Registrieren"])
@@ -372,7 +381,6 @@ def show_auth():
                     "password": password
                 })
                 st.session_state.user = res.user
-                # Prüfen ob Onboarding nötig
                 if is_new_user(res.user.id):
                     st.session_state.page = "onboarding"
                     st.session_state.onboarding_step = 1
@@ -397,7 +405,6 @@ def show_auth():
                     "role": "parent",
                     "subscription": "free"
                 }).execute()
-                # Direkt einloggen und Onboarding starten
                 st.session_state.user = res.user
                 st.session_state.page = "onboarding"
                 st.session_state.onboarding_step = 1
@@ -405,9 +412,21 @@ def show_auth():
             except Exception as e:
                 st.error(f"Fehler: {e}")
 
+    # PlayAI als Parent-Brand Footer
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([2, 1, 2])
+    with col2:
+        st.image(PLAYAI_LOGO, width=40)
+    st.markdown("<p style='text-align:center;color:#4b5563;font-size:0.75rem'>by PlayAI</p>", unsafe_allow_html=True)
+
 # ── ELTERN-DASHBOARD ───────────────────────────────────────────
 def show_dashboard():
-    st.title("📊 Eltern-Dashboard")
+    col1, col2 = st.columns([4, 1])
+    with col1:
+        st.title("📊 Eltern-Dashboard")
+    with col2:
+        st.image(PLAYAI_LOGO, width=55)
+
     st.markdown(f"Eingeloggt als: **{st.session_state.user.email}**")
 
     subscription = get_subscription(st.session_state.user.id)
@@ -563,12 +582,16 @@ def show_chat():
     child_name = st.session_state.child["name"] if st.session_state.child else "du"
     child_age = st.session_state.child["age"] if st.session_state.child else 10
 
-    st.title("🤖 Cozmo")
-    st.markdown(f"### Hallo {child_name}! Bereit zum Lernen?")
-
-    col1, col2 = st.columns([3, 1])
+    # Header mit Logo
+    col1, col2, col3 = st.columns([1, 3, 1])
+    with col1:
+        st.image(AIKIDS_LOGO, width=60)
     with col2:
-        if st.button("← Dashboard"):
+        st.markdown("<h2 style='text-align:center;color:#a855f7;margin-bottom:0'>Cozmo</h2>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align:center;color:#9ca3af;margin-top:0'>Hallo {child_name}! Bereit zum Lernen? 🚀</p>", unsafe_allow_html=True)
+    with col3:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("← Back"):
             st.session_state.page = "dashboard"
             st.rerun()
 
