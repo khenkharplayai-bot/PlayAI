@@ -2,3 +2,4 @@ streamlit
 anthropic
 supabase
 stripe
+python-dotenv
