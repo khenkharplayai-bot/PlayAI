@@ -202,7 +202,7 @@ def show_onboarding():
 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.image(AIKIDS_LOGO, width=100)
+        st.markdown(f'<img src="{AIKIDS_LOGO}" width="100" style="filter:brightness(0) saturate(100%) invert(44%) sepia(69%) saturate(1243%) hue-rotate(245deg) brightness(101%) contrast(96%);display:block;margin:0 auto">', unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
     render_steps(step)
@@ -358,7 +358,7 @@ def show_onboarding():
 def show_auth():
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.image(AIKIDS_LOGO, width=120)
+        st.markdown(f'<img src="{AIKIDS_LOGO}" width="120" style="filter:brightness(0) saturate(100%) invert(44%) sepia(69%) saturate(1243%) hue-rotate(245deg) brightness(101%) contrast(96%);display:block;margin:0 auto">', unsafe_allow_html=True)
 
     st.markdown("<h1 style='text-align:center;color:#a855f7;margin-top:0.5rem'>AI-Kids</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align:center;color:#9ca3af;margin-top:-0.5rem'>Eltern-Bereich</p>", unsafe_allow_html=True)
@@ -410,7 +410,7 @@ def show_auth():
     st.markdown("<br><br>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([2, 1, 2])
     with col2:
-        st.image(PLAYAI_LOGO, width=40)
+        st.markdown(f'<img src="{PLAYAI_LOGO}" width="40" style="filter:brightness(0) saturate(100%) invert(44%) sepia(69%) saturate(1243%) hue-rotate(245deg) brightness(101%) contrast(96%);display:block;margin:0 auto">', unsafe_allow_html=True)
     st.markdown("<p style='text-align:center;color:#4b5563;font-size:0.75rem'>by PlayAI</p>", unsafe_allow_html=True)
 
 # ── ELTERN-DASHBOARD ───────────────────────────────────────────
@@ -419,7 +419,7 @@ def show_dashboard():
     with col1:
         st.title("📊 Eltern-Dashboard")
     with col2:
-        st.image(PLAYAI_LOGO, width=55)
+        st.markdown(f'<img src="{PLAYAI_LOGO}" width="55" style="filter:brightness(0) saturate(100%) invert(44%) sepia(69%) saturate(1243%) hue-rotate(245deg) brightness(101%) contrast(96%)">', unsafe_allow_html=True)
 
     st.markdown(f"Eingeloggt als: **{st.session_state.user.email}**")
 
@@ -577,7 +577,7 @@ def show_chat():
 
     col1, col2, col3 = st.columns([1, 3, 1])
     with col1:
-        st.image(AIKIDS_LOGO, width=60)
+        st.markdown(f'<img src="{AIKIDS_LOGO}" width="60" style="filter:brightness(0) saturate(100%) invert(44%) sepia(69%) saturate(1243%) hue-rotate(245deg) brightness(101%) contrast(96%)">', unsafe_allow_html=True)
     with col2:
         st.markdown("<h2 style='text-align:center;color:#a855f7;margin-bottom:0'>Cozmo</h2>", unsafe_allow_html=True)
         st.markdown(f"<p style='text-align:center;color:#9ca3af;margin-top:0'>Hallo {child_name}! Bereit zum Lernen? 🚀</p>", unsafe_allow_html=True)
