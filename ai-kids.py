@@ -35,7 +35,7 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    .stApp { background-color: #0f0f1a; color: #ffffff; }
+    .stApp { background-color: #0f0c1e; color: #ffffff; }
     .stChatMessage { border-radius: 12px; margin-bottom: 8px; color: #ffffff; }
     h1 { color: #a855f7; }
     h2 { color: #a855f7; }
@@ -358,9 +358,9 @@ def show_onboarding():
 def show_auth():
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.markdown(f'<img src="{AIKIDS_LOGO}" width="120" style="display:block;margin:0 auto">', unsafe_allow_html=True)
+        st.markdown(f'<img src="{AIKIDS_LOGO}" width="120" style="display:block;margin:0 auto;margin-bottom:4px">', unsafe_allow_html=True)
 
-    st.markdown("<h1 style='text-align:center;color:#a855f7;margin-top:0.5rem'>AI-Kids</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align:center;color:#a855f7;margin-top:0'>AI-Kids</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align:center;color:#9ca3af;margin-top:-0.5rem'>Eltern-Bereich</p>", unsafe_allow_html=True)
     st.divider()
 
@@ -411,7 +411,7 @@ def show_auth():
     col1, col2, col3 = st.columns([2, 1, 2])
     with col2:
         st.markdown(f'<img src="{PLAYAI_LOGO}" width="120" style="display:block;margin:0 auto">', unsafe_allow_html=True)
-    st.markdown("<p style='text-align:center;color:#4b5563;font-size:0.75rem'>by PlayAI</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center;color:#9ca3af;font-size:1rem;margin-top:4px'>by PlayAI</p>", unsafe_allow_html=True)
 
 # ── ELTERN-DASHBOARD ───────────────────────────────────────────
 def show_dashboard():
