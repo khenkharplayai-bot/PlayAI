@@ -356,12 +356,13 @@ def show_onboarding():
 
 # ── LOGIN / REGISTRIERUNG ──────────────────────────────────────
 def show_auth():
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.markdown(f'<img src="{AIKIDS_LOGO}" width="120" style="display:block;margin:0 auto;margin-bottom:4px">', unsafe_allow_html=True)
-
-    st.markdown("<h1 style='text-align:center;color:#a855f7;margin-top:0'>AI-Kids</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align:center;color:#9ca3af;margin-top:-0.5rem'>Eltern-Bereich</p>", unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="text-align:center;padding:1.5rem 0 1rem 0">
+        <img src="{AIKIDS_LOGO}" width="110" style="margin-bottom:8px">
+        <div style="font-size:2rem;font-weight:900;color:#a855f7;line-height:1.1">AI-Kids</div>
+        <div style="font-size:1rem;color:#9ca3af;margin-top:6px">Eltern-Bereich</div>
+    </div>
+    """, unsafe_allow_html=True)
     st.divider()
 
     tab1, tab2 = st.tabs(["Anmelden", "Registrieren"])
@@ -407,11 +408,12 @@ def show_auth():
             except Exception as e:
                 st.error(f"Fehler: {e}")
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([2, 1, 2])
-    with col2:
-        st.markdown(f'<img src="{PLAYAI_LOGO}" width="120" style="display:block;margin:0 auto">', unsafe_allow_html=True)
-    st.markdown("<p style='text-align:center;color:#9ca3af;font-size:1rem;margin-top:4px'>by PlayAI</p>", unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="text-align:center;padding:2rem 0 1rem 0">
+        <img src="{{PLAYAI_LOGO}}" width="110" style="margin-bottom:8px">
+        <div style="font-size:1rem;color:#9ca3af;margin-top:6px">by PlayAI</div>
+    </div>
+    """.replace("{PLAYAI_LOGO}", PLAYAI_LOGO), unsafe_allow_html=True)
 
 # ── ELTERN-DASHBOARD ───────────────────────────────────────────
 def show_dashboard():
