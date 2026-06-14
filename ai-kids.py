@@ -410,7 +410,7 @@ def show_auth():
     st.markdown("<br><br>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([2, 1, 2])
     with col2:
-        st.markdown(f'<img src="{PLAYAI_LOGO}" width="70" style="display:block;margin:0 auto">', unsafe_allow_html=True)
+        st.markdown(f'<img src="{PLAYAI_LOGO}" width="120" style="display:block;margin:0 auto">', unsafe_allow_html=True)
     st.markdown("<p style='text-align:center;color:#4b5563;font-size:0.75rem'>by PlayAI</p>", unsafe_allow_html=True)
 
 # ── ELTERN-DASHBOARD ───────────────────────────────────────────
