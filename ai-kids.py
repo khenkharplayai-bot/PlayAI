@@ -153,7 +153,7 @@ def create_checkout_session(user_id, email, price_id, plan_name):
             mode="subscription",
             success_url="https://ai-kids.streamlit.app/?success=true&plan=pro",
             cancel_url="https://ai-kids.streamlit.app/?cancelled=true",
-            cancel_url="http://localhost:8501?cancelled=true",
+        
         )
         return session.url
     except Exception as e:
