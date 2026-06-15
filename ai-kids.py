@@ -814,11 +814,45 @@ def show_chat():
             "content": welcome
         }).execute()
 
+    # CSS: Cozmo Avatar über data URL ins DOM injizieren
+    st.markdown(f"""
+    <style>
+    [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) img,
+    [data-testid="chatAvatarIcon-assistant"] {{
+        display: none !important;
+    }}
+    [data-testid="chatAvatarIcon-assistant"] {{
+        background-image: url("{COZMO_AVATAR}") !important;
+        background-size: cover !important;
+        background-color: transparent !important;
+        border-radius: 50% !important;
+        width: 40px !important;
+        height: 40px !important;
+        display: block !important;
+    }}
+    </style>
+    """, unsafe_allow_html=True)
+
+    def render_cozmo_msg(text):
+        st.markdown(f"""
+        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+            <img src="{COZMO_AVATAR}" width="48" height="48"
+                 style="border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid #a855f7">
+            <div style="background:rgba(124,58,237,0.15);border:1px solid rgba(168,85,247,0.3);
+                        border-radius:12px;padding:12px 16px;color:#ffffff;font-size:16px;line-height:1.6;
+                        max-width:85%">
+                {text}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
     # Chat-Verlauf
     for message in st.session_state.messages:
-        avatar = COZMO_AVATAR if message["role"] == "assistant" else None
-        with st.chat_message(message["role"], avatar=avatar):
-            st.markdown(message["content"])
+        if message["role"] == "assistant":
+            render_cozmo_msg(message["content"])
+        else:
+            with st.chat_message("user"):
+                st.markdown(message["content"])
 
     # Eingabe
     if prompt := st.chat_input("Stell mir eine Frage..."):
@@ -844,7 +878,7 @@ Sprich {child_name} manchmal direkt mit dem Namen an.
         else:
             system_prompt = base_prompt + "\nDu gibst KEINE direkten Antworten, sondern stellst Gegenfragen die das Kind zum Denken bringen. Das ist das Sokrates-Prinzip."
 
-        with st.chat_message("assistant", avatar=COZMO_AVATAR):
+        with st.spinner("Cozmo denkt..."):
             response = client.messages.create(
                 model="claude-haiku-4-5-20251001",
                 max_tokens=1024,
@@ -852,7 +886,8 @@ Sprich {child_name} manchmal direkt mit dem Namen an.
                 messages=st.session_state.messages
             )
             answer = response.content[0].text
-            st.markdown(answer)
+
+        render_cozmo_msg(answer)
 
         st.session_state.messages.append({"role": "assistant", "content": answer})
         supabase_admin.table("messages").insert({
