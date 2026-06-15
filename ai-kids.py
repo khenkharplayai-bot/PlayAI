@@ -151,7 +151,8 @@ def create_checkout_session(user_id, email, price_id, plan_name):
             payment_method_types=["card"],
             line_items=[{"price": price_id, "quantity": 1}],
             mode="subscription",
-            success_url="http://localhost:8501?success=true&plan=" + plan_name,
+            success_url="https://ai-kids.streamlit.app/?success=true&plan=pro",
+            cancel_url="https://ai-kids.streamlit.app/?cancelled=true",
             cancel_url="http://localhost:8501?cancelled=true",
         )
         return session.url
