@@ -43,6 +43,9 @@ st.markdown("""
     p { color: #ffffff; }
     label { color: #ffffff !important; }
     [data-testid="stChatMessage"] p { color: #ffffff !important; font-size: 16px !important; }
+    [data-testid="stChatMessage"] li { color: #ffffff !important; font-size: 16px !important; }
+    [data-testid="stChatMessage"] ol { color: #ffffff !important; }
+    [data-testid="stChatMessage"] * { color: #ffffff !important; }
     .stChatInputContainer { border-top: 1px solid #2d2d4e; }
     .stTextInput input { background-color: #1a1a2e; color: #ffffff; border: 1px solid #a855f7; }
     .stButton button { background-color: #a855f7; color: #ffffff; border: none; border-radius: 8px; }
@@ -678,6 +681,7 @@ def show_child_select():
 
 # ── MODUL-AUSWAHL ──────────────────────────────────────────────
 def show_module_select():
+    import random
     child_name = st.session_state.child["name"] if st.session_state.child else "du"
 
     col1, col2, col3 = st.columns([1, 3, 1])
@@ -694,13 +698,42 @@ def show_module_select():
 
     st.divider()
 
-    # 2 Spalten Grid für Module
-    for i in range(0, len(MODULES), 2):
+    # Zufällig 1 Modul featuren, Rest symmetrisch 2-spaltig
+    if "featured_module_idx" not in st.session_state:
+        st.session_state.featured_module_idx = random.randint(0, len(MODULES) - 1)
+
+    featured_idx = st.session_state.featured_module_idx
+    featured = MODULES[featured_idx]
+    others = [m for i, m in enumerate(MODULES) if i != featured_idx]
+
+    # Featured Modul — volle Breite, hervorgehoben
+    st.markdown(f"""
+    <div style="background:linear-gradient(135deg,rgba(124,58,237,0.35),rgba(168,85,247,0.15));
+         border:2px solid #a855f7;border-radius:20px;padding:1.5rem;text-align:center;margin-bottom:0.5rem">
+        <div style="font-size:0.7rem;font-weight:700;color:#22d3ee;letter-spacing:0.12em;
+             text-transform:uppercase;margin-bottom:0.5rem">✨ Heute empfohlen</div>
+        <div style="font-size:3rem;margin-bottom:0.4rem">{featured['icon']}</div>
+        <div style="font-weight:800;font-size:1.3rem;color:#a855f7;margin-bottom:0.3rem">{featured['name']}</div>
+        <div style="color:#c4b5fd;font-size:0.9rem">{featured['desc']}</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button(f"{featured['icon']} Jetzt starten", key=f"mod_{featured['id']}", use_container_width=True):
+        st.session_state.active_module = featured
+        st.session_state.page = "chat"
+        st.session_state.messages = []
+        st.session_state.session_id = None
+        st.rerun()
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("<p style='color:#9ca3af;font-size:0.85rem;margin-bottom:0.5rem'>Oder wähle ein anderes Modul:</p>", unsafe_allow_html=True)
+
+    # Restliche 6 Module — 2-spaltig symmetrisch
+    for i in range(0, len(others), 2):
         col1, col2 = st.columns(2)
         for j, col in enumerate([col1, col2]):
             idx = i + j
-            if idx < len(MODULES):
-                mod = MODULES[idx]
+            if idx < len(others):
+                mod = others[idx]
                 with col:
                     st.markdown(f"""
                     <div class="module-card">
