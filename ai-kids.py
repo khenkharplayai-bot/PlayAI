@@ -834,17 +834,24 @@ def show_chat():
     """, unsafe_allow_html=True)
 
     def render_cozmo_msg(text):
-        st.markdown(f"""
-        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
-            <img src="{COZMO_AVATAR}" width="48" height="48"
-                 style="border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid #a855f7">
-            <div style="background:rgba(124,58,237,0.15);border:1px solid rgba(168,85,247,0.3);
-                        border-radius:12px;padding:12px 16px;color:#ffffff;font-size:16px;line-height:1.6;
-                        max-width:85%">
-                {text}
-            </div>
+    import re
+    # Markdown manuell in HTML umwandeln – st.markdown() parst innerhalb von
+    # unsafe_allow_html-Blöcken kein verschachteltes Markdown mehr.
+    safe_text = text.replace("<", "&lt;").replace(">", "&gt;")
+    safe_text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", safe_text)
+    safe_text = re.sub(r"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)", r"<em>\1</em>", safe_text)
+    safe_text = safe_text.replace("\n", "<br>")
+    st.markdown(f"""
+    <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+        <img src="{COZMO_AVATAR}" width="48" height="48"
+             style="border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid #a855f7">
+        <div style="background:rgba(124,58,237,0.15);border:1px solid rgba(168,85,247,0.3);
+                    border-radius:12px;padding:12px 16px;color:#ffffff;font-size:16px;line-height:1.6;
+                    max-width:85%">
+            {safe_text}
         </div>
-        """, unsafe_allow_html=True)
+    </div>
+    """, unsafe_allow_html=True)
 
     # Chat-Verlauf
     for message in st.session_state.messages:
