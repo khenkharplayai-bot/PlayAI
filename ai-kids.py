@@ -462,8 +462,10 @@ def show_onboarding():
 def show_auth():
     st.markdown(f"""
     <div style="text-align:center;padding:1.5rem 0 1rem 0">
-        <img src="{AIKIDS_LOGO}" width="110" style="margin-bottom:8px">
-        <div style="font-size:2rem;font-weight:900;color:#a855f7;line-height:1.1">AI-Kids</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px">
+            <img src="{AIKIDS_LOGO}" style="height:2.4rem;width:auto;display:block">
+            <span style="font-size:2rem;font-weight:900;color:#a855f7;line-height:1">AI-Kids</span>
+        </div>
         <div style="font-size:1rem;color:#9ca3af;margin-top:6px">Eltern-Bereich</div>
     </div>
     """, unsafe_allow_html=True)
@@ -514,8 +516,10 @@ def show_auth():
 
     st.markdown(f"""
     <div style="text-align:center;padding:2rem 0 1rem 0">
-        <img src="{PLAYAI_LOGO}" width="110" style="margin-bottom:8px">
-        <div style="font-size:1rem;color:#9ca3af;margin-top:6px">by PlayAI</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:6px">
+            <img src="{PLAYAI_LOGO}" style="height:1.1rem;width:auto;display:block">
+            <span style="font-size:1rem;color:#9ca3af;line-height:1">by PlayAI</span>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -525,7 +529,7 @@ def show_dashboard():
     with col1:
         st.title("📊 Eltern-Dashboard")
     with col2:
-        st.markdown(f'<img src="{PLAYAI_LOGO}" width="70" >', unsafe_allow_html=True)
+        st.markdown(f'<div style="display:flex;align-items:center;height:100%;padding-top:0.5rem"><img src="{PLAYAI_LOGO}" style="height:1.8rem;width:auto"></div>', unsafe_allow_html=True)
 
     st.markdown(f"Eingeloggt als: **{st.session_state.user.email}**")
 
@@ -688,7 +692,7 @@ def show_module_select():
 
     col1, col2, col3 = st.columns([1, 3, 1])
     with col1:
-        st.markdown(f'<img src="{AIKIDS_LOGO}" width="60">', unsafe_allow_html=True)
+        st.markdown(f'<div style="display:flex;align-items:center;justify-content:center;height:100%;padding-top:0.3rem"><img src="{AIKIDS_LOGO}" style="height:2.4rem;width:auto"></div>', unsafe_allow_html=True)
     with col2:
         st.markdown(f"<h2 style='text-align:center;color:#a855f7;margin-bottom:0'>Hey {child_name}! 👋</h2>", unsafe_allow_html=True)
         st.markdown("<p style='text-align:center;color:#9ca3af;margin-top:0'>Was möchtest du heute mit Cozmo machen?</p>", unsafe_allow_html=True)
@@ -760,7 +764,7 @@ def show_chat():
     # Header
     col1, col2, col3 = st.columns([1, 3, 1])
     with col1:
-        st.markdown(f'<img src="{AIKIDS_LOGO}" width="60">', unsafe_allow_html=True)
+        st.markdown(f'<div style="display:flex;align-items:center;justify-content:center;height:100%;padding-top:0.3rem"><img src="{AIKIDS_LOGO}" style="height:2.4rem;width:auto"></div>', unsafe_allow_html=True)
     with col2:
         st.markdown("<h2 style='text-align:center;color:#a855f7;margin-bottom:0'>Cozmo</h2>", unsafe_allow_html=True)
         if module:
