@@ -38,7 +38,7 @@ st.markdown("""
 <style>
     .stApp { background-color: #0f0c1e; color: #ffffff; }
     [data-testid="stExpander"] { background-color: #1a1a2e !important; border: 1px solid #2d2d4e !important; border-radius: 8px !important; }
-    [data-testid="stExpander"] summary { color: #c4b5fd !important; }
+    [data-t[data-testid="stExpander"] summary { color: #c4b5fd !important; background-color: #1a1a2e !important; }
     [data-testid="stExpanderDetails"] { background-color: #0f0c1e !important; } details[open] { background-color: #0f0c1e !important; }
     h1 { color: #a855f7; }
     h2 { color: #a855f7; }
