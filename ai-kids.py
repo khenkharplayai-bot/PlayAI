@@ -40,7 +40,6 @@ st.set_page_config(
     [data-testid="stExpanderDetails"] { background-color: #1a1a2e !important; }
     <style>
     .stApp { background-color: #0f0c1e; color: #ffffff; }
-    .stChatMessage { border-radius: 0.75rem; margin-bottom: 0.5rem; color: #ffffff; }
     h1 { color: #a855f7; }
     h2 { color: #a855f7; }
     h3 { color: #ffffff; }
