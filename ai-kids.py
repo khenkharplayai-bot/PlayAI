@@ -354,10 +354,9 @@ def show_dashboard():
         with st.expander(f"{child_name}{module_label} - {started} - {len(user_msgs)} Fragen"):
             for msg in msgs.data:
                 if msg["role"] == "user":
-                    st.markdown(f"**{child_name}:** {msg['content']}")
+                    st.markdown(f"👦 **{child_name}:** {msg['content']}")
                 else:
-                    st.markdown(f"**Cozmo:** {msg['content']}")
-                st.divider()
+                    st.markdown(f"🤖 **Cozmo:** {msg['content']}")
 
 # ── KIND AUSWÄHLEN ─────────────────────────────────────────────
 def show_child_select():
