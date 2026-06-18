@@ -34,9 +34,11 @@ st.set_page_config(
     layout="centered"
 )
 
-st.markdown([data-testid="stExpander"] { background-color: #1a1a2e !important; border: 1px solid #2d2d4e !important; border-radius: 8px !important; }
+.stApp { background-color: #0f0c1e; color: #ffffff; }
+    [data-testid="stExpander"] { background-color: #1a1a2e !important; border: 1px solid #2d2d4e !important; border-radius: 8px !important; }
     [data-testid="stExpander"] summary { color: #c4b5fd !important; }
-    [data-testid="stExpanderDetails"] { background-color: #1a1a2e !important; }"""
+    [data-testid="stExpanderDetails"] { background-color: #1a1a2e !important; }
+    .stChatMessage { border-radius: 12px; margin-bottom: 8px; color: #ffffff; }
     <style>
     .stApp { background-color: #0f0c1e; color: #ffffff; }
     .stChatMessage { border-radius: 12px; margin-bottom: 8px; color: #ffffff; }
