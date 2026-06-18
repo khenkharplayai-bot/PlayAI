@@ -469,7 +469,7 @@ def show_onboarding():
 def show_auth():
     st.markdown(f"""
      <div style="text-align:center;padding:1.5rem 0 1rem 0">
-    <div style="display:flex;align-items:center;justify-content:center;gap:12px">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;width:fit-content;margin:0 auto">
         <img src="{AIKIDS_LOGO}" style="height:5rem;width:auto">
         <span style="font-size:3rem;font-weight:900;color:#a855f7;line-height:6rem">AI-Kids</span>
     </div>
