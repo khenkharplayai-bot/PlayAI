@@ -321,7 +321,7 @@ def show_onboarding():
 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.markdown(f'<img src="{AIKIDS_LOGO}" width="100" style="display:block;margin:0 auto">', unsafe_allow_html=True)
+        st.markdown(f'<img src="{AIKIDS_LOGO}" width="160" style="display:block;margin:0 auto">', unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
     render_steps(step)
@@ -524,7 +524,7 @@ def show_auth():
     st.markdown(f"""
     <div style="text-align:center;padding:2rem 0 1rem 0">
         <div style="display:flex;align-items:center;justify-content:center;gap:4px">
-            <img src="{PLAYAI_LOGO}" style="height:1.7rem;width:auto;display:block">
+            <img src="{PLAYAI_LOGO}" style="height:2.5rem;width:auto;display:block">
             <span style="font-size:1rem;color:#9ca3af;line-height:1">by PlayAI</span>
         </div>
     </div>
