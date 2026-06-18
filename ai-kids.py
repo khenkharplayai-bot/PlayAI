@@ -837,8 +837,8 @@ def show_chat():
         background-size: cover !important;
         background-color: transparent !important;
         border-radius: 50% !important;
-        width: 40px !important;
-        height: 40px !important;
+        width: 40px!important;
+        height: 40px!important;
         display: block !important;
     }}
     </style>
