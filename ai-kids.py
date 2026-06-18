@@ -468,13 +468,13 @@ def show_onboarding():
 # ── LOGIN / REGISTRIERUNG ──────────────────────────────────────
 def show_auth():
     st.markdown(f"""
-    <div style="text-align:center;padding:1.5rem 0 1rem 0">
-        <div style="display:flex;align-items:center;justify-content:center;gap:4px">
-            <img src="{AIKIDS_LOGO}" style="height:6rem;width:auto;display:block">
-            <span style="font-size:2rem;font-weight:900;color:#a855f7;line-height:1">AI-Kids</span>
-        </div>
-        <div style="font-size:1rem;color:#9ca3af;margin-top:6px">Eltern-Bereich</div>
+     <div style="text-align:center;padding:1.5rem 0 1rem 0">
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px">
+        <img src="{AIKIDS_LOGO}" style="height:6rem;width:auto;display:block">
+        <span style="font-size:2rem;font-weight:900;color:#a855f7;line-height:1">AI-Kids</span>
     </div>
+    <div style="font-size:1rem;color:#9ca3af;margin-top:6px">Eltern-Bereich</div>
+</div>
     """, unsafe_allow_html=True)
     st.divider()
 
