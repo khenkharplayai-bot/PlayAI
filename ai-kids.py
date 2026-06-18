@@ -725,8 +725,7 @@ def show_module_select():
     # Featured Modul — volle Breite, hervorgehoben
     st.markdown(f"""
     <div style='background:linear-gradient(135deg,rgba(124,58,237,0.35),rgba(168,85,247,0.15));border:2px solid #a855f7;border-radius:20px;padding:1.5rem;text-align:center;margin-bottom:0.5rem'>
-        <div style="font-size:0.7rem;font-weight:700;color:#22d3ee;letter-spacing:0.12em;
-             text-transform:uppercase;margin-bottom:0.5rem">✨ Heute empfohlen</div>
+        <div style="font-size:0.7rem;font-weight:700;color:#22d3ee;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem">✨ Heute empfohlen</div>
         <div style="font-size:3rem;margin-bottom:0.4rem">{featured['icon']}</div>
         <div style="font-weight:800;font-size:1.3rem;color:#a855f7;margin-bottom:0.3rem">{featured['name']}</div>
         <div style="color:#c4b5fd;font-size:0.9rem">{featured['desc']}</div>
