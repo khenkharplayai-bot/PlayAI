@@ -833,7 +833,7 @@ def show_chat():
         display: none !important;
     }}
     [data-testid="chatAvatarIcon-assistant"] {{
-        background-image: url("{COZMO_AVATAR}") !important;
+        background-image: url('{COZMO_AVATAR}') !important;
         background-size: cover !important;
         background-color: transparent !important;
         border-radius: 50% !important;
