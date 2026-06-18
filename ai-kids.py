@@ -493,7 +493,7 @@ def show_chat():
         safe_text = safe_text.replace("\n", "<br>")
         st.markdown(f'''
         <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
-            <img src="{COZMO_AVATAR}" width="48" height="48" style="border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid #a855f7">
+            <img src="{COZMO_AVATAR}" width="72" height="72" style="border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid #a855f7">
             <div style="background:rgba(124,58,237,0.15);border:1px solid rgba(168,85,247,0.3);border-radius:12px;padding:12px 16px;color:#ffffff;font-size:16px;line-height:1.6;max-width:85%">
                 {safe_text}
             </div>
