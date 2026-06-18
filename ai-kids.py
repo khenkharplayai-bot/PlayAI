@@ -524,7 +524,7 @@ def show_auth():
     st.markdown(f"""
     <div style="text-align:center;padding:2rem 0 1rem 0">
         <div style="display:flex;align-items:center;justify-content:center;gap:4px">
-            <img src="{PLAYAI_LOGO}" style="height:2.5rem;width:auto;display:block">
+            <img src="{PLAYAI_LOGO}" style="height:3.5rem;width:auto;display:block">
             <span style="font-size:1rem;color:#9ca3af;line-height:1">by PlayAI</span>
         </div>
     </div>
