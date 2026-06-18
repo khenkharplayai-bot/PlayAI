@@ -127,13 +127,12 @@ st.markdown("""
     filter: brightness(0) saturate(100%) invert(56%) sepia(92%)
             saturate(1729%) hue-rotate(243deg) brightness(101%) contrast(98%);
     }
-    }
     /* Logos auf #a855f7 einfärben */
     img[src^="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAE"] {
-    filter: brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(230deg) brightness(0.85) !important;
+    filter: brightness(0) saturate(100%) invert(48%) sepia(89%) saturate(2000%) hue-rotate(247deg) brightness(95%) !important;
     }
     img[src^="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAD"] {
-    filter: brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(230deg) brightness(0.85) !important;
+    filter: brightness(0) saturate(100%) invert(48%) sepia(89%) saturate(2000%) hue-rotate(247deg) brightness(95%) !important;
     }
     }
 </style>
