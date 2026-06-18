@@ -468,13 +468,13 @@ def show_onboarding():
                 st.session_state.onboarding_step = 2
                 st.rerun()
 
-# ── LOGIN / REGISTRIERUNG ──────────────────────────────────────
-def show_auth():
-    st.markdown(f"""
-     <div style="text-align:center;padding:1.5rem 0 1rem 0">
-    <div style="display:flex;align-items:center;justify-content:center;gap:8px;width:fit-content;margin:0 auto">
-        <img src="{AIKIDS_LOGO}" style="height:5rem;width:auto">
-        <span style="font-size:3rem;font-weight:900;color:#a855f7;line-height:6rem">AI-Kids</span>
+<div style="text-align:center;padding:1.5rem 0 1rem 0">
+    <div style="display:inline-flex;align-items:center;gap:8px">
+        <img src="{AIKIDS_LOGO}" style="height:3.5rem;width:auto;display:inline-block;vertical-align:middle">
+        <span style="font-size:2.5rem;font-weight:900;color:#a855f7;vertical-align:middle;line-height:1">AI-Kids</span>
+    </div>
+    <div style="font-size:1rem;color:#9ca3af;margin-top:6px">Eltern-Bereich</div>
+</div>
     </div>
     <div style="font-size:1rem;color:#9ca3af;margin-top:6px">Eltern-Bereich</div>
 </div>
