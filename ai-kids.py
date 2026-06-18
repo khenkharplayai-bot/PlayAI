@@ -832,15 +832,6 @@ def show_chat():
     [data-testid="chatAvatarIcon-assistant"] {{
         display: none !important;
     }}
-    [data-testid="chatAvatarIcon-assistant"] {{
-        background-image: url('{COZMO_AVATAR}') !important;
-        background-size: cover !important;
-        background-color: transparent !important;
-        border-radius: 50% !important;
-        width: 40px!important;
-        height: 40px!important;
-        display: block !important;
-    }}
     </style>
     """, unsafe_allow_html=True)
 
