@@ -492,9 +492,10 @@ def show_chat():
         safe_text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", safe_text)
         safe_text = safe_text.replace("\n", "<br>")
         st.markdown(f'''
-        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
-            <img src="{COZMO_AVATAR}" width="72" height="72" style="border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid #a855f7">
-            <div style="background:rgba(124,58,237,0.15);border:1px solid rgba(168,85,247,0.3);border-radius:12px;padding:12px 16px;color:#ffffff;font-size:16px;line-height:1.6;max-width:85%">
+        <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:16px">
+            <img src="{COZMO_AVATAR}" width="120" height="120"
+                 style="border-radius:50%;flex-shrink:0;object-fit:cover;border:3px solid #a855f7">
+            <div style="background:rgba(124,58,237,0.25);border:1px solid rgba(168,85,247,0.5);border-radius:16px;padding:14px 18px;color:#ffffff;font-size:16px;line-height:1.6;max-width:85%;margin-top:8px">
                 {safe_text}
             </div>
         </div>
