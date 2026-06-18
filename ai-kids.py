@@ -122,6 +122,11 @@ st.markdown("""
         color: #c4b5fd;
         margin-bottom: 0.5rem;
     }
+    /* PlayAI-Logo auf AI-Kids-Lila (#a855f7) einfärben */
+    .playai-logo-img {
+        filter: brightness(0) saturate(100%) invert(56%) sepia(92%)
+                saturate(1729%) hue-rotate(243deg) brightness(101%) contrast(98%);
+    }
 </style>
 """, unsafe_allow_html=True)
 
