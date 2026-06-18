@@ -321,7 +321,7 @@ def show_onboarding():
 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.markdown(f'<img src="{AIKIDS_LOGO}" width="160" style="display:block;margin:0 auto">', unsafe_allow_html=True)
+        st.markdown(f'<img src="{AIKIDS_LOGO}" width="220" style="display:block;margin:0 auto">', unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
     render_steps(step)
