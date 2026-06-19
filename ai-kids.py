@@ -424,14 +424,16 @@ def show_child_select():
 def show_module_select():
     import random
     child_name = st.session_state.child["name"] if st.session_state.child else "du"
-    col1, col2, col3 = st.columns([1, 3, 1])
-    with col1:
-        st.markdown(f'<div style="display:flex;align-items:center;justify-content:center;height:100%;padding-top:0.3rem"><img src="{AIKIDS_LOGO}" style="height:2.4rem;width:auto"></div>', unsafe_allow_html=True)
-    with col2:
-        st.markdown(f"<h2 style='text-align:center;color:#a855f7;margin-bottom:0'>Hey {child_name}!</h2>", unsafe_allow_html=True)
-        st.markdown("<p style='text-align:center;color:#9ca3af;margin-top:0'>Was moechtest du heute mit Cozmo machen?</p>", unsafe_allow_html=True)
-    with col3:
-        st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown(f"""
+<div style='text-align:center;padding:1rem 0 0.5rem 0'>
+    <img src='{COZMO_BASE64}' style='width:90px;height:90px;border-radius:50%;border:2px solid #a855f7;margin-bottom:0.5rem'><br>
+    <h2 style='color:#a855f7;margin:0'>Hey {child_name}!</h2>
+    <p style='color:#9ca3af;margin-top:0.3rem'>Was moechtest du heute mit Cozmo machen?</p>
+</div>
+""", unsafe_allow_html=True)
+
+    col_back, col_empty = st.columns([1, 3])
+    with col_back:
         if st.button("Zurueck"):
             st.session_state.page = "child_select"
             st.rerun()
