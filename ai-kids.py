@@ -476,21 +476,24 @@ def show_chat():
     child_age = st.session_state.child["age"] if st.session_state.child else 10
     module = st.session_state.active_module
 
-    col1, col2, col3 = st.columns([1, 3, 1])
-    with col1:
-        st.markdown(f'<div style="display:flex;align-items:center;justify-content:center;height:100%;padding-top:0.3rem"><img src="{AIKIDS_LOGO}" style="height:2.4rem;width:auto"></div>', unsafe_allow_html=True)
-    with col2:
-        st.markdown("<h2 style='text-align:center;color:#a855f7;margin-bottom:0'>Cozmo</h2>", unsafe_allow_html=True)
-        if module:
-            st.markdown(f"<p style='text-align:center;margin-top:4px'><span class='module-badge'>{module['icon']} {module['name']}</span></p>", unsafe_allow_html=True)
-    with col3:
-        st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("Module"):
-            st.session_state.page = "module_select"
-            st.session_state.messages = []
-            st.session_state.session_id = None
-            st.session_state.active_module = None
-            st.rerun()
+    st.markdown(f"""
+<div style='text-align:center;padding:1rem 0 0.3rem 0'>
+    <img src='{COZMO_AVATAR}' style='width:80px;height:80px;border-radius:50%;border:2px solid #a855f7;margin-bottom:0.4rem'><br>
+    <h2 style='color:#a855f7;margin:0'>Cozmo</h2>
+    <p style='text-align:center;margin-top:4px'><span class='module-badge'>{module['icon']} {module['name']}</span></p>
+</div>
+""", unsafe_allow_html=True)
+
+        col_back, col_empty = st.columns([1, 3])
+        with col_back:
+            if st.button("Module"):
+                st.session_state.page = "module_select"
+                st.session_state.messages = []
+                st.session_state.session_id = None
+                st.session_state.active_module = None
+                st.rerun()
+        st.divider()
+    
     st.divider()
 
     if "session_id" not in st.session_state or st.session_state.session_id is None:
