@@ -304,7 +304,6 @@ def show_dashboard():
     col1, col2 = st.columns([4, 1])
     with col1:
         st.markdown(f'<div style="display:flex;align-items:center;gap:12px"><img src="{AIKIDS_LOGO}" style="height:3rem;width:auto"><span style="font-size:2.5rem;font-weight:800;color:#ffffff">Eltern-Dashboard</span></div>', unsafe_allow_html=True)
-    with col2:
     st.markdown(f"Eingeloggt als: **{st.session_state.user.email}**")
     subscription = get_subscription(st.session_state.user.id)
     plan_badge = {"free": "Free", "pro": "Pro", "family": "Family"}
