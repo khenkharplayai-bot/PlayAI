@@ -483,7 +483,7 @@ def show_chat():
 </div>
     """, unsafe_allow_html=True)
     col_back, col_empty = st.columns([1, 3])
-        with col_back:
+    with col_back:
             if st.button("Module"):
                 st.session_state.page = "module_select"
                 st.session_state.messages = []
