@@ -482,7 +482,6 @@ def show_chat():
     <p style='text-align:center;margin-top:4px'><span class='module-badge'>{module['icon']} {module['name']}</span></p>
 </div>
 """, unsafe_allow_html=True)
-
         col_back, col_empty = st.columns([1, 3])
         with col_back:
             if st.button("Module"):
@@ -492,7 +491,6 @@ def show_chat():
                 st.session_state.active_module = None
                 st.rerun()
         st.divider()
-    st.divider()
 
     if "session_id" not in st.session_state or st.session_state.session_id is None:
         st.session_state.session_id = str(uuid.uuid4())
