@@ -491,7 +491,6 @@ def show_chat():
                 st.session_state.active_module = None
                 st.rerun()
         st.divider()
-
     if "session_id" not in st.session_state or st.session_state.session_id is None:
         st.session_state.session_id = str(uuid.uuid4())
         child_id = st.session_state.child["id"] if st.session_state.child else None
