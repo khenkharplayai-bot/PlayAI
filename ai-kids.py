@@ -426,7 +426,7 @@ def show_module_select():
     child_name = st.session_state.child["name"] if st.session_state.child else "du"
     st.markdown(f"""
 <div style='text-align:center;padding:1rem 0 0.5rem 0'>
-    <img src='{COZMO_BASE64}' style='width:90px;height:90px;border-radius:50%;border:2px solid #a855f7;margin-bottom:0.5rem'><br>
+    <img src='{COZMO_AVATAR}' style='width:90px;height:90px;border-radius:50%;border:2px solid #a855f7;margin-bottom:0.5rem'><br>
     <h2 style='color:#a855f7;margin:0'>Hey {child_name}!</h2>
     <p style='color:#9ca3af;margin-top:0.3rem'>Was moechtest du heute mit Cozmo machen?</p>
 </div>
