@@ -374,13 +374,12 @@ def show_dashboard():
         module_label = f" - {module_name}" if module_name else ""
         msgs = supabase_admin.table("messages").select("*").eq("session_id", session_id).order("created_at").execute()
         user_msgs = [m for m in msgs.data if m["role"] == "user"]
-        with st.expander(f"{child_name}{module_label} - {started} - {len(user_msgs)} Fragen"):
+        with st.expander(f"📅 {started}  |  👦 {child_name}{module_label}  |  💬 {len(user_msgs)} Fragen"):
             for msg in msgs.data:
                 if msg["role"] == "user":
-                    st.markdown(f"**{child_name}:** {msg['content']}")
+                    st.markdown(f'''<div style="background:#2d2d4e;border-radius:12px;padding:8px 14px;margin:4px 0;color:#fff;font-size:0.9rem"><strong>👦 {child_name}:</strong> {msg["content"]}</div>''', unsafe_allow_html=True)
                 else:
-                    st.markdown(f"**Cozmo:** {msg['content']}")
-                st.divider()
+                    st.markdown(f'''<div style="background:rgba(124,58,237,0.2);border:1px solid rgba(168,85,247,0.3);border-radius:12px;padding:8px 14px;margin:4px 0;color:#fff;font-size:0.9rem"><strong>🤖 Cozmo:</strong> {msg["content"]}</div>''', unsafe_allow_html=True)
 
 # ── KIND AUSWÄHLEN ─────────────────────────────────────────────
 def show_child_select():
