@@ -303,7 +303,7 @@ def show_auth():
 def show_dashboard():
     col1, col2 = st.columns([4, 1])
     with col1:
-        st.title("Eltern-Dashboard")
+        st.markdown(f'<div style="display:flex;align-items:center;gap:12px"><img src="{AIKIDS_LOGO}" style="height:3rem;width:auto"><span style="font-size:2.5rem;font-weight:800;color:#ffffff">Eltern-Dashboard</span></div>', unsafe_allow_html=True)
     with col2:
         st.markdown(f'<div style="padding-top:0.5rem"><img src="{PLAYAI_LOGO}" style="height:1.8rem;width:auto"></div>', unsafe_allow_html=True)
 
