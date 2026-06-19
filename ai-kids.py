@@ -482,7 +482,7 @@ def show_chat():
     <p style='text-align:center;margin-top:4px'><span class='module-badge'>{module['icon']} {module['name']}</span></p>
 </div>
     """, unsafe_allow_html=True)
-        col_back, col_empty = st.columns([1, 3])
+    col_back, col_empty = st.columns([1, 3])
         with col_back:
             if st.button("Module"):
                 st.session_state.page = "module_select"
