@@ -337,6 +337,30 @@ def show_dashboard():
             st.rerun()
 
     st.divider()
+
+    # Lernstatus pro Kind
+    st.markdown("### Lernfortschritt")
+    children = supabase_admin.table("children").select("*").eq("parent_id", st.session_state.user.id).execute()
+    if children.data:
+        cols = st.columns(len(children.data))
+        for i, child in enumerate(children.data):
+            with cols[i]:
+                child_sessions = supabase_admin.table("chat_sessions").select("id").eq("child_id", child["id"]).execute()
+                child_msgs = supabase_admin.table("messages").select("id").eq("role", "user").execute()
+                session_ids = [s["id"] for s in child_sessions.data]
+                total_sessions = len(session_ids)
+                st.markdown(f"""
+<div style="background:rgba(124,58,237,0.15);border:1px solid #a855f7;border-radius:16px;padding:1rem;text-align:center">
+    <div style="font-size:2rem">👦</div>
+    <div style="font-weight:700;color:#a855f7;margin-bottom:0.5rem">{child["name"]}</div>
+    <div style="color:#9ca3af;font-size:0.8rem">{child["age"]} Jahre</div>
+    <hr style="border-color:#2d2d4e;margin:0.5rem 0">
+    <div style="font-size:1.5rem;font-weight:800;color:#22d3ee">{total_sessions}</div>
+    <div style="color:#9ca3af;font-size:0.75rem">Lern-Sessions</div>
+</div>
+""", unsafe_allow_html=True)
+
+    st.divider()
     st.markdown("### Chat-Sessions")
     sessions = supabase_admin.table("chat_sessions").select("*, children(name)").order("started_at", desc=True).execute()
     if not sessions.data:
