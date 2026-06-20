@@ -383,7 +383,7 @@ def show_child_select():
     st.markdown(f"""
 <div style='text-align:center;padding:2.5rem 0 0.5rem 0'>
     <img src='{COZMO_AVATAR}' style='width:90px;height:90px;border-radius:50%;border:2px solid #a855f7;margin-bottom:0.5rem'><br>
-    <h2 style='color:#a855f7;margin:0;text-align:center'>Kind-Profil</h2>
+    <h2 style='color:#a855f7;margin:0;text-align:center;margin-left:1.5rem'>Kind-Profil</h2>
     <p style='color:#9ca3af;margin-top:0.3rem'>Wer chattet heute mit Cozmo?</p>
 </div>
 """, unsafe_allow_html=True)
@@ -429,7 +429,7 @@ def show_module_select():
     st.markdown(f"""
 <div style='text-align:center;padding:2.5rem 0 0.5rem 0'>
     <img src='{COZMO_AVATAR}' style='width:90px;height:90px;border-radius:50%;border:2px solid #a855f7;margin-bottom:0.5rem'><br>
-    <h2 style='color:#a855f7;margin:0;text-align:center'>Hey {child_name}!</h2>
+    <h2 style='color:#a855f7;margin:0;text-align:center;margin-left:1.5rem'>Hey {child_name}!</h2>
     <p style='color:#9ca3af;margin-top:0.3rem'>Was moechtest du heute mit Cozmo machen?</p>
 </div>
 """, unsafe_allow_html=True)
