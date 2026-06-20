@@ -478,7 +478,7 @@ def show_chat():
     child_age = st.session_state.child["age"] if st.session_state.child else 10
     module = st.session_state.active_module
     st.markdown(f"""
-<div style='text-align:center;padding:2.5rem 0 0.3rem 0'>
+<div style='text-align:center;padding:2.5rem 0 0.3rem 0;margin-left:-1rem;'>
     <img src='{COZMO_AVATAR}' style='width:80px;height:80px;border-radius:50%;border:2px solid #a855f7;margin-bottom:0.4rem;display:block;margin-left:auto;margin-right:auto;'>
     <h2 style='color:#a855f7;margin:0'>Cozmo</h2>
     <p style='text-align:center;margin-top:4px'><span class='module-badge'>{module['icon']} {module['name']}</span></p>
