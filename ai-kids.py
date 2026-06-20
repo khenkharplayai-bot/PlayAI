@@ -214,7 +214,7 @@ def show_onboarding():
                 else:
                     st.warning("Bitte gib einen Namen ein.")
 
-    elif step == 3:()
+    elif step == 3:
         child_name = st.session_state.child["name"] if st.session_state.child else "dein Kind"
         st.markdown(f"## Plan fuer {child_name}")
         col1, col2, col3 = st.columns(3)
