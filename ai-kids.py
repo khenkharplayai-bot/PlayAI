@@ -283,7 +283,6 @@ def show_auth():
         if st.button("Registrieren"):
             try:
                 res = supabase_auth.auth.sign_up({"email": email, "password": password})
-                supabase_admin.table("profiles").insert({"id": res.user.id, "email": email, "role": "parent", "subscription": "free"}).execute()
                 st.success("✅ Registrierung erfolgreich! Bitte check deine E-Mail und bestätige deinen Account.")
             except Exception as e:
                 st.error(f"Fehler: {e}")
