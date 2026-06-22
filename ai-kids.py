@@ -299,8 +299,60 @@ def show_auth():
     </div>
 </div>
 """, unsafe_allow_html=True)
-
 # ── ELTERN-DASHBOARD ───────────────────────────────────────────
+def show_dashboard():
+    col1, col2 = st.columns([4, 1])
+    with col1:
+        st.markdown(f'<div style="display:flex;align-items:center;gap:12px"><img src="{AIKIDS_LOGO}" style="height:3rem;width:auto"><span style="font-size:2.5rem;font-weight:800;color:#ffffff">Eltern-Dashboard</span></div>', unsafe_allow_html=True)
+    st.markdown(f"Eingeloggt als: **{st.session_state.user.email}**")
+    subscription = get_subscription(st.session_state.user.id)
+    plan_badge = {"free": "Free", "pro": "Pro", "family": "Family"}
+    st.markdown(f"**Aktueller Plan:** {plan_badge.get(subscription, 'Free')}")
+
+    params = st.query_params
+    if "success" in params:
+        plan = params.get("plan", "pro")
+        upgrade_subscription(st.session_state.user.id, plan)
+        st.success(f"Upgrade auf {plan.capitalize()} erfolgreich!")
+        st.query_params.clear()
+        st.rerun()
+    if "cancelled" in params:
+        st.warning("Zahlung abgebrochen.")
+        st.query_params.clear()
+
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        if st.button("Cozmo starten"):
+            st.session_state.page = "child_select"
+            st.rerun()
+    with col2:
+        if st.button("Logout"):
+            st.session_state.user = None
+            st.session_state.page = "dashboard"
+            st.session_state.child = None
+            st.session_state.active_module = None
+            st.rerun()
+
+    st.divider()
+    st.markdown("### Lernfortschritt")
+    children = supabase_admin.table("children").select("*").eq("parent_id", st.session_state.user.id).execute()
+    if children.data:
+        cols = st.columns(len(children.data))
+        for i, child in enumerate(children.data):
+            with cols[i]:
+                child_sessions = supabase_admin.table("chat_sessions").select("id").eq("child_id", child["id"]).execute()
+                total_sessions = len(child_sessions.data)
+                st.markdown(f"""
+<div style="background:rgba(124,58,237,0.15);border:1px solid #a855f7;border-radius:16px;padding:1rem;text-align:center">
+    <div style="font-size:2rem">👦</div>
+    <div style="font-weight:700;color:#a855f7;margin-bottom:0.5rem">{child["name"]}</div>
+    <div style="color:#9ca3af;font-size:0.8rem">{child["age"]} Jahre</div>
+    <hr style="border-color:#2d2d4e;margin:0.5rem 0">
+    <div style="font-size:1.5rem;font-weight:800;color:#22d3ee">{total_sessions}</div>
+    <div style="color:#9ca3af;font-size:0.75rem">Lern-Sessions</div>
+</div>
+""", unsafe_allow_html=True)
+
     st.divider()
     st.markdown("### Chat-Sessions")
 
