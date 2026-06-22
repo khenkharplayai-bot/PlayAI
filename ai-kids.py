@@ -301,7 +301,7 @@ def show_auth():
 """, unsafe_allow_html=True)
 
 # ── ELTERN-DASHBOARD ───────────────────────────────────────────
-st.divider()
+    st.divider()
     st.markdown("### Chat-Sessions")
 
     children_ids = [c["id"] for c in children.data] if children.data else []
