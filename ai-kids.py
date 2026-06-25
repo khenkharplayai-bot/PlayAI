@@ -304,7 +304,12 @@ def show_dashboard():
     subscription = get_subscription(st.session_state.user.id)
     plan_badge = {"free": "Free", "pro": "Pro", "family": "Family"}
     st.markdown(f"**Aktueller Plan:** {plan_badge.get(subscription, 'Free')}")
-
+    if subscription == "free":
+            if st.button("⬆️ Upgrade auf Pro"):
+                price_id = st.secrets["STRIPE_PRO_PRICE_ID"]
+                url = create_checkout_session(st.session_state.user_id, st.session_state.user.email, price_id, "pro")
+                if url:
+                    st.markdown(f'<meta http-equiv="refresh" content="0;url={url}">', unsafe_allow_html=True)
     params = st.query_params
     if "success" in params:
         plan = params.get("plan", "pro")
