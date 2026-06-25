@@ -308,8 +308,8 @@ def show_dashboard():
             if st.button("⬆️ Upgrade auf Pro"):
                 price_id = st.secrets["STRIPE_PRO_PRICE_ID"]
                 url = create_checkout_session(st.session_state.user.id, st.session_state.user.email, price_id, "pro")
-                if url:
-                    st.markdown(f'<meta http-equiv="refresh" content="0;url={url}">', unsafe_allow_html=True)
+            if url:
+                st.link_button("➡️ Jetzt bezahlen", url)
     params = st.query_params
     if "success" in params:
         plan = params.get("plan", "pro")
