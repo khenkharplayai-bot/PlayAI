@@ -12,9 +12,9 @@ stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 
 supabase = create_client(
-    os.getenv("SUPABASE_URL"),
-    os.getenv("SUPABASE_SECRET_KEY")
-)
+        os.getenv("SUPABASE_URL"),
+        os.getenv("SUPABASE_SECRET_KEY")
+    )
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
