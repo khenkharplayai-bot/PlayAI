@@ -58,7 +58,7 @@ def webhook():
         if profile.data and len(profile.data) > 0:
             supabase.table("profiles").update({
                 "subscription": "free"
-            }).eq("id", profile.data["id"]).execute()
+            }).eq("id", profile.data[0]["id"]).execute()
             print(f"⬇️ Downgrade auf free für customer {customer_id}")
 
     return jsonify({"status": "ok"}), 200
