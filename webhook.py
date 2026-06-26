@@ -43,7 +43,7 @@ def webhook():
         if profile.data and len(profile.data) > 0:
             supabase.table("profiles").update({
                 "subscription": plan
-            }).eq("id", profile.data["id"]).execute()
+            }).eq("id", profile.data[0]["id"]).execute()
             print(f"✅ Upgrade auf {plan} für customer {customer_id}")
 
     elif event["type"] in ["customer.subscription.deleted", "invoice.payment_failed"]:
