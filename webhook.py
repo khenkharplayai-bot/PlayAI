@@ -1,67 +1,42 @@
 from flask import Flask, request, jsonify
 import stripe
 import os
-from dotenv import load_dotenv
 from supabase import create_client
-
-load_dotenv()
 
 app = Flask(__name__)
 
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 
-supabase = create_client(
-        os.getenv("SUPABASE_URL"),
-        os.getenv("SUPABASE_SECRET_KEY")
-    )
+SUPABASE_URL = os.getenv("SUPABASE_URL", "")
+SUPABASE_KEY = os.getenv("SUPABASE_SECRET_KEY", "")
+
+print(f"DEBUG SUPABASE_URL='{SUPABASE_URL[:20] if SUPABASE_URL else 'LEER'}'")
+print(f"DEBUG SUPABASE_KEY='{SUPABASE_KEY[:10] if SUPABASE_KEY else 'LEER'}'")
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
+    supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
     payload = request.data
     sig_header = request.headers.get("Stripe-Signature")
-
     try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, WEBHOOK_SECRET
-        )
+        event = stripe.Webhook.construct_event(payload, sig_header, WEBHOOK_SECRET)
     except Exception as e:
-        print(f"Webhook Fehler: {e}")
         return jsonify({"error": str(e)}), 400
-
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
         customer_id = session.get("customer")
-        print(f"🔍 Customer ID: {customer_id}")
         plan = session.get("metadata", {}).get("plan", "pro")
-        
-        profile = supabase.table("profiles")\
-            .select("id")\
-            .eq("stripe_customer_id", customer_id)\
-            .execute()
-        
+        profile = supabase.table("profiles").select("id").eq("stripe_customer_id", customer_id).execute()
         if profile.data and len(profile.data) > 0:
-            supabase.table("profiles").update({
-                "subscription": plan
-            }).eq("id", profile.data[0]["id"]).execute()
-            print(f"✅ Upgrade auf {plan} für customer {customer_id}")
-
+            supabase.table("profiles").update({"subscription": plan}).eq("id", profile.data[0]["id"]).execute()
     elif event["type"] in ["customer.subscription.deleted", "invoice.payment_failed"]:
         subscription = event["data"]["object"]
         customer_id = subscription.get("customer")
-        
-        profile = supabase.table("profiles")\
-            .select("id")\
-            .eq("stripe_customer_id", customer_id)\
-            .execute()
-        
+        profile = supabase.table("profiles").select("id").eq("stripe_customer_id", customer_id).execute()
         if profile.data and len(profile.data) > 0:
-            supabase.table("profiles").update({
-                "subscription": "free"
-            }).eq("id", profile.data[0]["id"]).execute()
-            print(f"⬇️ Downgrade auf free für customer {customer_id}")
-
+            supabase.table("profiles").update({"subscription": "free"}).eq("id", profile.data[0]["id"]).execute()
     return jsonify({"status": "ok"}), 200
 
 if __name__ == "__main__":
-   app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8502)))
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8502)))
