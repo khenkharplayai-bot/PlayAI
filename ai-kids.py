@@ -638,8 +638,8 @@ def show_reset_password():
                     reset_email = st.session_state.get("reset_email", "")
                     for u in users:
                             if u.email == reset_email:
-                            user_id = u.id
-                            break
+                                user_id = u.id
+                                break
                     if user_id:
                         supabase_admin.auth.admin.update_user_by_id(
                             user_id,
