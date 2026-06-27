@@ -640,16 +640,29 @@ def show_reset_password():
                 except:
                     pass
                 try:
-                    supabase_admin.auth.admin.update_user_by_email(
-                        st.session_state.reset_email,
-                        {"password": new_password}
-                    )
-                    st.success("✅ Passwort erfolgreich geändert! Bitte jetzt einloggen.")
-                    st.session_state.reset_step = 1
-                    st.session_state.reset_code = ""
-                    st.session_state.reset_email = ""
-                    st.session_state.page = "auth"
-                    st.rerun()
+                    try:
+                    # User ID per Email holen
+                    users = supabase_admin.auth.admin.list_users()
+                    user_id = None
+                    for u in users:
+                        if u.email == st.session_state.reset_email:
+                            user_id = u.id
+                            break
+                    if user_id:
+                        supabase_admin.auth.admin.update_user_by_id(
+                            user_id,
+                            {"password": new_password}
+                        )
+                        st.success("✅ Passwort erfolgreich geändert! Bitte jetzt einloggen.")
+                        st.session_state.reset_step = 1
+                        st.session_state.reset_code = ""
+                        st.session_state.reset_email = ""
+                        st.session_state.page = "auth"
+                        st.rerun()
+                    else:
+                        st.error("User nicht gefunden.")
+                except Exception as e:
+                    st.error(f"Fehler: {e}")
                 except Exception as e:
                     st.error(f"Fehler: {e}")
 
