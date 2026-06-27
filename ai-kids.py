@@ -597,24 +597,40 @@ def show_reset_password():
 
     # Schritt 3: Neues Passwort eingeben
     elif st.session_state.reset_step == 3:
-        st.success("✅ Identität bestätigt! Bitte neues Passwort eingeben.")
-        new_password = st.text_input("Neues Passwort", type="password", key="reset_new_pw")
-        new_password2 = st.text_input("Passwort wiederholen", type="password", key="reset_new_pw2")
-        if st.button("Passwort setzen"):
-            if new_password != new_password2:
-                st.error("Passwörter stimmen nicht überein.")
-            elif len(new_password) < 6:
-                st.error("Passwort muss mindestens 6 Zeichen haben.")
-            else:
-                try:
-                    supabase_auth.auth.update_user({"password": new_password})
-                    st.success("✅ Passwort erfolgreich geändert!")
-                    st.session_state.reset_step = 1
-                    st.session_state.reset_email = ""
-                    st.session_state.page = "auth"
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"Fehler: {e}")
+            st.success("✅ Identität bestätigt! Bitte neues Passwort eingeben.")
+
+            st.components.v1.html("""
+            <script>
+            const hash = window.location.hash;
+            if (hash && hash.includes('access_token')) {
+                const params = new URLSearchParams(hash.substring(1));
+                const token = params.get('access_token');
+                const refresh = params.get('refresh_token');
+                if (token) {
+                    const input = window.parent.document.querySelector('input[data-testid="stTextInput"][aria-label="reset_token"]');
+                    if (input) {
+                        input.value = token + '|' + refresh;
+                        input.dispatchEvent(new Event('input', {bubbles: true}));
+                    }
+                }
+            }
+            </script>
+            """, height=0)
+
+            token = st.text_input("reset_token", key="reset_token", label_visibility="collapsed")
+            new_password = st.text_input("Neues Passwort", type="password", key="reset_new_pw")
+            new_password2 = st.text_input("Passwort wiederholen", type="password", key="reset_new_pw2")
+            if st.button("Passwort setzen"):
+                if new_password != new_password2:
+                    st.error("Passwörter stimmen nicht überein.")
+                elif len(new_password) < 6:
+                    st.error("Passwort muss mindestens 6 Zeichen haben.")
+                else:
+                    try:
+                        if token and '|' in token:
+                            parts = token.split('|')
+                            supabase_auth.auth.set_session(parts[0], parts[1])
+                        supabase_auth.auth.update_user({"passwor
 
     if st.button("← Zurück zum Login"):
         st.session_state.reset_step = 1
