@@ -570,14 +570,58 @@ def show_chat():
 # ── PASSWORD RESET ─────────────────────────────────────────────
 def show_reset_password():
     st.markdown("### 🔑 Passwort zurücksetzen")
-    email = st.text_input("E-Mail Adresse", key="reset_email")
-    if st.button("Reset-Link senden"):
-        try:
-            supabase_auth.auth.reset_password_email(email)
-            st.success("✅ Reset-Link wurde an deine E-Mail gesendet! Bitte check dein Postfach.")
-        except Exception as e:
-            st.error(f"Fehler: {e}")
+    
+    if "reset_step" not in st.session_state:
+        st.session_state.reset_step = 1
+    if "reset_email" not in st.session_state:
+        st.session_state.reset_email = ""
+
+    # Schritt 1: Email eingeben
+    if st.session_state.reset_step == 1:
+        email = st.text_input("E-Mail Adresse", key="reset_email_input")
+        if st.button("Code senden"):
+            try:
+                supabase_auth.auth.sign_in_with_otp({
+                    "email": email,
+                    "options": {"should_create_user": False}
+                })
+                st.session_state.reset_email = email
+                st.session_state.reset_step = 2
+                st.rerun()
+            except Exception as e:
+                st.error(f"Fehler: {e}")
+
+    # Schritt 2: Code + neues Passwort
+    elif st.session_state.reset_step == 2:
+        st.info(f"✉️ Code wurde an **{st.session_state.reset_email}** gesendet.")
+        code = st.text_input("6-stelliger Code aus der E-Mail", key="reset_code")
+        new_password = st.text_input("Neues Passwort", type="password", key="reset_new_pw")
+        new_password2 = st.text_input("Passwort wiederholen", type="password", key="reset_new_pw2")
+        
+        if st.button("Passwort setzen"):
+            if new_password != new_password2:
+                st.error("Passwörter stimmen nicht überein.")
+            elif len(new_password) < 6:
+                st.error("Passwort muss mindestens 6 Zeichen haben.")
+            else:
+                try:
+                    supabase_auth.auth.verify_otp({
+                        "email": st.session_state.reset_email,
+                        "token": code,
+                        "type": "email"
+                    })
+                    supabase_auth.auth.update_user({"password": new_password})
+                    st.success("✅ Passwort erfolgreich geändert!")
+                    st.session_state.reset_step = 1
+                    st.session_state.reset_email = ""
+                    st.session_state.page = "auth"
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Fehler: {e}")
+
     if st.button("← Zurück zum Login"):
+        st.session_state.reset_step = 1
+        st.session_state.reset_email = ""
         st.session_state.page = "auth"
         st.rerun()
 # ── ROUTING ────────────────────────────────────────────────────
