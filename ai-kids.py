@@ -630,8 +630,14 @@ def show_reset_password():
                         if token and '|' in token:
                             parts = token.split('|')
                             supabase_auth.auth.set_session(parts[0], parts[1])
-                        supabase_auth.auth.update_user({"passwor
-
+                        supabase_auth.auth.update_user({"password": new_password})
+                        st.success("✅ Passwort erfolgreich geändert!")
+                        st.session_state.reset_step = 1
+                        st.session_state.reset_email = ""
+                        st.session_state.page = "auth"
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Fehler: {e}")
     if st.button("← Zurück zum Login"):
         st.session_state.reset_step = 1
         st.session_state.reset_email = ""
