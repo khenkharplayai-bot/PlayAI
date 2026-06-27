@@ -570,7 +570,7 @@ def show_chat():
 # ── PASSWORD RESET ─────────────────────────────────────────────
 def show_reset_password():
     st.markdown("### 🔑 Passwort zurücksetzen")
-    
+
     if "reset_step" not in st.session_state:
         st.session_state.reset_step = 1
     if "reset_email" not in st.session_state:
@@ -579,25 +579,27 @@ def show_reset_password():
     # Schritt 1: Email eingeben
     if st.session_state.reset_step == 1:
         email = st.text_input("E-Mail Adresse", key="reset_email_input")
-        if st.button("Code senden"):
+        if st.button("Reset-Link senden"):
             try:
-                supabase_auth.auth.sign_in_with_otp({
-                    "email": email,
-                    "options": {"should_create_user": False}
-                })
+                supabase_auth.auth.reset_password_email(
+                    email,
+                    options={"redirect_to": "https://ai-kids.streamlit.app/?reset=true"}
+                )
                 st.session_state.reset_email = email
                 st.session_state.reset_step = 2
                 st.rerun()
             except Exception as e:
                 st.error(f"Fehler: {e}")
 
-    # Schritt 2: Code + neues Passwort
+    # Schritt 2: Neues Passwort setzen (nach Magic Link Klick)
     elif st.session_state.reset_step == 2:
-        st.info(f"✉️ Code wurde an **{st.session_state.reset_email}** gesendet.")
-        code = st.text_input("6-stelliger Code aus der E-Mail", key="reset_code")
+        st.info(f"✉️ Reset-Link wurde an **{st.session_state.reset_email}** gesendet. Klick den Link in der Mail — du wirst automatisch hierher zurückgeleitet.")
+
+    # Schritt 3: Neues Passwort eingeben
+    elif st.session_state.reset_step == 3:
+        st.success("✅ Identität bestätigt! Bitte neues Passwort eingeben.")
         new_password = st.text_input("Neues Passwort", type="password", key="reset_new_pw")
         new_password2 = st.text_input("Passwort wiederholen", type="password", key="reset_new_pw2")
-        
         if st.button("Passwort setzen"):
             if new_password != new_password2:
                 st.error("Passwörter stimmen nicht überein.")
@@ -605,11 +607,6 @@ def show_reset_password():
                 st.error("Passwort muss mindestens 6 Zeichen haben.")
             else:
                 try:
-                    supabase_auth.auth.verify_otp({
-                        "email": st.session_state.reset_email,
-                        "token": code,
-                        "type": "email"
-                    })
                     supabase_auth.auth.update_user({"password": new_password})
                     st.success("✅ Passwort erfolgreich geändert!")
                     st.session_state.reset_step = 1
