@@ -278,7 +278,7 @@ def show_auth():
             except Exception as e:
                 st.error(f"Fehler: {e}")
         st.markdown("---")
-            if st.button("🔑 Passwort vergessen?", key="forgot_pw"):
+        if st.button("🔑 Passwort vergessen?", key="forgot_pw"):
             st.session_state.page = "reset_password"
             st.rerun()    
     with tab2:
