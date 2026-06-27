@@ -581,7 +581,9 @@ def show_reset_password():
         st.session_state.page = "auth"
         st.rerun()
 # ── ROUTING ────────────────────────────────────────────────────
-if st.session_state.user is None:
+if st.session_state.page == "reset_password":
+    show_reset_password()
+elif st.session_state.user is None:
     show_auth()
 elif st.session_state.page == "onboarding":
     show_onboarding()
