@@ -651,7 +651,7 @@ def show_reset_password():
                         st.session_state.reset_email = ""
                         st.session_state.page = "auth"
                         st.rerun()
-                else:
+                    else:
                     st.error("User nicht gefunden. Bitte nochmal von vorne starten.")
             except Exception as e:
                 st.error(f"Fehler: {e}")
