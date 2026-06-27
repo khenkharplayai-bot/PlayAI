@@ -277,6 +277,10 @@ def show_auth():
                 st.rerun()
             except Exception as e:
                 st.error(f"Fehler: {e}")
+            st.markdown("---")
+                if st.button("🔑 Passwort vergessen?", key="forgot_pw"):
+                st.session_state.page = "reset_password"
+                st.rerun()    
     with tab2:
         email = st.text_input("E-Mail", key="reg_email")
         password = st.text_input("Passwort (min. 6 Zeichen)", type="password", key="reg_password")
