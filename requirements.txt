@@ -2,3 +2,4 @@ flask
 stripe
 supabase
 python-dotenv
+anthropic
