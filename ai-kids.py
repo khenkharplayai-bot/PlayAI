@@ -622,6 +622,11 @@ def show_reset_password():
         st.session_state.page = "auth"
         st.rerun()
 # ── ROUTING ────────────────────────────────────────────────────
+# Reset-Link Redirect abfangen
+if "reset" in st.query_params:
+    st.session_state.page = "reset_password"
+    st.session_state.reset_step = 3
+    st.query_params.clear()
 if st.session_state.page == "reset_password":
     show_reset_password()
 elif st.session_state.user is None:
