@@ -569,77 +569,93 @@ def show_chat():
         supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "assistant", "content": answer}).execute()
 # ── PASSWORD RESET ─────────────────────────────────────────────
 def show_reset_password():
+    import random
+    import time
+    import requests
+
     st.markdown("### 🔑 Passwort zurücksetzen")
 
     if "reset_step" not in st.session_state:
         st.session_state.reset_step = 1
     if "reset_email" not in st.session_state:
         st.session_state.reset_email = ""
+    if "reset_code" not in st.session_state:
+        st.session_state.reset_code = ""
+    if "reset_code_time" not in st.session_state:
+        st.session_state.reset_code_time = 0
 
     # Schritt 1: Email eingeben
     if st.session_state.reset_step == 1:
         email = st.text_input("E-Mail Adresse", key="reset_email_input")
-        if st.button("Reset-Link senden"):
-            try:
-                supabase_auth.auth.reset_password_email(
-                    email,
-                    options={"redirect_to": "https://ai-kids.streamlit.app/?reset=true"}
-                )
-                st.session_state.reset_email = email
-                st.session_state.reset_step = 2
-                st.rerun()
-            except Exception as e:
-                st.error(f"Fehler: {e}")
-
-    # Schritt 2: Neues Passwort setzen (nach Magic Link Klick)
-    elif st.session_state.reset_step == 2:
-        st.info(f"✉️ Reset-Link wurde an **{st.session_state.reset_email}** gesendet. Klick den Link in der Mail — du wirst automatisch hierher zurückgeleitet.")
-
-    # Schritt 3: Neues Passwort eingeben
-    elif st.session_state.reset_step == 3:
-            st.success("✅ Identität bestätigt! Bitte neues Passwort eingeben.")
-
-            st.components.v1.html("""
-            <script>
-            const hash = window.location.hash;
-            if (hash && hash.includes('access_token')) {
-                const params = new URLSearchParams(hash.substring(1));
-                const token = params.get('access_token');
-                const refresh = params.get('refresh_token');
-                if (token) {
-                    const input = window.parent.document.querySelector('input[data-testid="stTextInput"][aria-label="reset_token"]');
-                    if (input) {
-                        input.value = token + '|' + refresh;
-                        input.dispatchEvent(new Event('input', {bubbles: true}));
+        if st.button("Code senden"):
+            if not email:
+                st.error("Bitte E-Mail eingeben.")
+            else:
+                code = str(random.randint(100000, 999999))
+                resend_key = st.secrets["RESEND_API_KEY"]
+                response = requests.post(
+                    "https://api.resend.com/emails",
+                    headers={"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"},
+                    json={
+                        "from": "AI-Kids <noreply@ai-kids.de>",
+                        "to": [email],
+                        "subject": "Dein Sicherheitscode",
+                        "html": f"<h2>🔑 Dein Code</h2><p>Dein Code lautet: <strong style='font-size:2rem'>{code}</strong></p><p>Gültig für 10 Minuten.</p>"
                     }
-                }
-            }
-            </script>
-            """, height=0)
-
-            token = st.text_input("reset_token", key="reset_token", label_visibility="collapsed")
-            new_password = st.text_input("Neues Passwort", type="password", key="reset_new_pw")
-            new_password2 = st.text_input("Passwort wiederholen", type="password", key="reset_new_pw2")
-            if st.button("Passwort setzen"):
-                if new_password != new_password2:
-                    st.error("Passwörter stimmen nicht überein.")
-                elif len(new_password) < 6:
-                    st.error("Passwort muss mindestens 6 Zeichen haben.")
+                )
+                if response.status_code == 200:
+                    st.session_state.reset_code = code
+                    st.session_state.reset_email = email
+                    st.session_state.reset_code_time = time.time()
+                    st.session_state.reset_step = 2
+                    st.rerun()
                 else:
-                    try:
-                        if token and '|' in token:
-                            parts = token.split('|')
-                            supabase_auth.auth.set_session(parts[0], parts[1])
-                        supabase_auth.auth.update_user({"password": new_password})
-                        st.success("✅ Passwort erfolgreich geändert!")
-                        st.session_state.reset_step = 1
-                        st.session_state.reset_email = ""
-                        st.session_state.page = "auth"
-                        st.rerun()
-                    except Exception as e:
-                        st.error(f"Fehler: {e}")
+                    st.error(f"E-Mail konnte nicht gesendet werden: {response.text}")
+
+    # Schritt 2: Code + neues Passwort
+    elif st.session_state.reset_step == 2:
+        st.info(f"✉️ Code wurde an **{st.session_state.reset_email}** gesendet.")
+        code_input = st.text_input("6-stelliger Code", key="reset_code_input")
+        new_password = st.text_input("Neues Passwort", type="password", key="reset_new_pw")
+        new_password2 = st.text_input("Passwort wiederholen", type="password", key="reset_new_pw2")
+
+        if st.button("Passwort setzen"):
+            if time.time() - st.session_state.reset_code_time > 600:
+                st.error("Code abgelaufen. Bitte neu anfordern.")
+                st.session_state.reset_step = 1
+                st.rerun()
+            elif code_input != st.session_state.reset_code:
+                st.error("Falscher Code.")
+            elif new_password != new_password2:
+                st.error("Passwörter stimmen nicht überein.")
+            elif len(new_password) < 6:
+                st.error("Passwort muss mindestens 6 Zeichen haben.")
+            else:
+                try:
+                    # Admin API zum Passwort setzen
+                    user = supabase_auth.auth.sign_in_with_password({
+                        "email": st.session_state.reset_email,
+                        "password": st.session_state.reset_email  # dummy — wird gleich überschrieben
+                    })
+                except:
+                    pass
+                try:
+                    supabase_admin.auth.admin.update_user_by_email(
+                        st.session_state.reset_email,
+                        {"password": new_password}
+                    )
+                    st.success("✅ Passwort erfolgreich geändert! Bitte jetzt einloggen.")
+                    st.session_state.reset_step = 1
+                    st.session_state.reset_code = ""
+                    st.session_state.reset_email = ""
+                    st.session_state.page = "auth"
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Fehler: {e}")
+
     if st.button("← Zurück zum Login"):
         st.session_state.reset_step = 1
+        st.session_state.reset_code = ""
         st.session_state.reset_email = ""
         st.session_state.page = "auth"
         st.rerun()
