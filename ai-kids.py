@@ -567,7 +567,19 @@ def show_chat():
         render_cozmo_msg(answer)
         st.session_state.messages.append({"role": "assistant", "content": answer})
         supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "assistant", "content": answer}).execute()
-
+# ── PASSWORD RESET ─────────────────────────────────────────────
+def show_reset_password():
+    st.markdown("### 🔑 Passwort zurücksetzen")
+    email = st.text_input("E-Mail Adresse", key="reset_email")
+    if st.button("Reset-Link senden"):
+        try:
+            supabase_auth.auth.reset_password_email(email)
+            st.success("✅ Reset-Link wurde an deine E-Mail gesendet! Bitte check dein Postfach.")
+        except Exception as e:
+            st.error(f"Fehler: {e}")
+    if st.button("← Zurück zum Login"):
+        st.session_state.page = "auth"
+        st.rerun()
 # ── ROUTING ────────────────────────────────────────────────────
 if st.session_state.user is None:
     show_auth()
