@@ -640,7 +640,6 @@ def show_reset_password():
                 except:
                     pass
                 try:
-                    try:
                     # User ID per Email holen
                     users = supabase_admin.auth.admin.list_users()
                     user_id = None
