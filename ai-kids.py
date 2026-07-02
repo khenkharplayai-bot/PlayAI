@@ -555,37 +555,37 @@ def show_chat():
                     i += 1
                 i += 1
 
-        for message in st.session_state.messages:
-            if message["role"] == "assistant":
-                render_Xaino_msg(message["content"])
-            else:
-                with st.chat_message("user"):
-                    st.markdown(message["content"])
-
-        if prompt := st.chat_input("Stell mir eine Frage..."):
-            st.session_state.messages.append({"role": "user", "content": prompt})
+    for message in st.session_state.messages:
+        if message["role"] == "assistant":
+            render_Xaino_msg(message["content"])
+        else:
             with st.chat_message("user"):
-                st.markdown(prompt)
-            supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "user", "content": prompt}).execute()
+                st.markdown(message["content"])
 
-            base_prompt = f"Du bist Xaino, ein freundlicher KI-Lernbegleiter fuer Kinder von AI-Kids. Du sprichst mit {child_name}, {child_age} Jahre alt. Passe deine Sprache dem Alter an."
-            if module:
-                system_prompt = base_prompt + "\n\n" + module["prompt"]
-            else:
-                system_prompt = base_prompt + "\nDu gibst KEINE direkten Antworten, sondern stellst Gegenfragen. Das ist das Sokrates-Prinzip."
+    if prompt := st.chat_input("Stell mir eine Frage..."):
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
+        supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "user", "content": prompt}).execute()
 
-            with st.spinner("Xaino denkt..."):
-                response = client.messages.create(
-                    model="claude-haiku-4-5-20251001",
-                    max_tokens=1024,
-                    system=system_prompt,
-                    messages=st.session_state.messages
-                )
-                answer = response.content[0].text
+        base_prompt = f"Du bist Xaino, ein freundlicher KI-Lernbegleiter fuer Kinder von AI-Kids. Du sprichst mit {child_name}, {child_age} Jahre alt. Passe deine Sprache dem Alter an."
+        if module:
+            system_prompt = base_prompt + "\n\n" + module["prompt"]
+        else:
+            system_prompt = base_prompt + "\nDu gibst KEINE direkten Antworten, sondern stellst Gegenfragen. Das ist das Sokrates-Prinzip."
 
-            render_Xaino_msg(answer)
-            st.session_state.messages.append({"role": "assistant", "content": answer})
-            supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "assistant", "content": answer}).execute()
+        with st.spinner("Xaino denkt..."):
+            response = client.messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=1024,
+                system=system_prompt,
+                messages=st.session_state.messages
+            )
+            answer = response.content[0].text
+
+        render_Xaino_msg(answer)
+        st.session_state.messages.append({"role": "assistant", "content": answer})
+        supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "assistant", "content": answer}).execute()
 
     
 
