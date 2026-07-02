@@ -567,9 +567,9 @@ if prompt := st.chat_input("Stell mir eine Frage..."):
         st.markdown(prompt)
     supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "user", "content": prompt}).execute()
 
-        base_prompt = f"Du bist Xaino, ein freundlicher KI-Lernbegleiter fuer Kinder von AI-Kids. Du sprichst mit {child_name}, {child_age} Jahre alt. Passe deine Sprache dem Alter an. Halte Antworten kurz, max. 3-4 Saetze."
-        if module:
-            system_prompt = base_prompt + "\n\n" + module["prompt"]
+            base_prompt = f"Du bist Xaino, ein freundlicher KI-Lernbegleiter fuer Kinder von AI-Kids. Du sprichst mit {child_name}, {child_age} Jahre alt. Passe deine Sprache dem Alter an. Halte Antworten kurz, max. 3-4 Saetze."
+            if module:
+                system_prompt = base_prompt + "\n\n" + module["prompt"]
     else:
         system_prompt = base_prompt + "\nDu gibst KEINE direkten Antworten, sondern stellst Gegenfragen. Das ist das Sokrates-Prinzip."
 
