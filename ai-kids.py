@@ -522,37 +522,38 @@ def show_chat():
             welcome = f"Hey {child_name}! Ich bin Xaino, dein Lernbegleiter. Was moechtest du heute lernen?"
         st.session_state.messages.append({"role": "assistant", "content": welcome})
         supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "assistant", "content": welcome}).execute()
+
 def render_Xaino_msg(text):
-    parts = re.split(r"```(\w*)\n?(.*?)```", text, flags=re.DOTALL)
+        parts = re.split(r"```(\w*)\n?(.*?)```", text, flags=re.DOTALL)
 
-    def bubble(content, first=False):
-        safe = content.replace("<", "&lt;").replace(">", "&gt;")
-        safe = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", safe)
-        safe = re.sub(r"`([^`]+)`", r"<code style='background:rgba(255,255,255,0.15);padding:2px 6px;border-radius:6px;'>\1</code>", safe)
-        safe = safe.strip().replace("\n", "<br>")
-        avatar = f'<img src="{Xaino_AVATAR}" width="48" height="48" style="border-radius:50%;flex-shrink:0;object-fit:cover;">' if first else '<div style="width:48px;flex-shrink:0;"></div>'
-        st.markdown(f'''
-        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
-            {avatar}
-            <div style="background:rgba(124,58,237,0.15);border:1px solid rgba(168,85,247,0.3);border-radius:16px;padding:12px 16px;flex:1;">
-                {safe}
+        def bubble(content, first=False):
+            safe = content.replace("<", "&lt;").replace(">", "&gt;")
+            safe = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", safe)
+            safe = re.sub(r"`([^`]+)`", r"<code style='background:rgba(255,255,255,0.15);padding:2px 6px;border-radius:6px;'>\1</code>", safe)
+            safe = safe.strip().replace("\n", "<br>")
+            avatar = f'<img src="{Xaino_AVATAR}" width="48" height="48" style="border-radius:50%;flex-shrink:0;object-fit:cover;">' if first else '<div style="width:48px;flex-shrink:0;"></div>'
+            st.markdown(f'''
+            <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+                {avatar}
+                <div style="background:rgba(124,58,237,0.15);border:1px solid rgba(168,85,247,0.3);border-radius:16px;padding:12px 16px;flex:1;">
+                    {safe}
+                </div>
             </div>
-        </div>
-        ''', unsafe_allow_html=True)
+            ''', unsafe_allow_html=True)
 
-    first = True
-    i = 0
-    while i < len(parts):
-        if i % 3 == 0:
-            if parts[i].strip():
-                bubble(parts[i], first=first)
+        first = True
+        i = 0
+        while i < len(parts):
+            if i % 3 == 0:
+                if parts[i].strip():
+                    bubble(parts[i], first=first)
+                    first = False
+            elif i % 3 == 1:
+                lang = parts[i] if parts[i] else "python"
+                st.code(parts[i + 1].strip("\n"), language=lang)
                 first = False
-        elif i % 3 == 1:
-            lang = parts[i] if parts[i] else "python"
-            st.code(parts[i + 1].strip("\n"), language=lang)
-            first = False
+                i += 1
             i += 1
-        i += 1
 
     for message in st.session_state.messages:
         if message["role"] == "assistant":
@@ -560,12 +561,31 @@ def render_Xaino_msg(text):
         else:
             with st.chat_message("user"):
                 st.markdown(message["content"])
-    
+
     if prompt := st.chat_input("Stell mir eine Frage..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
         supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "user", "content": prompt}).execute()
+
+        base_prompt = f"Du bist Xaino, ein freundlicher KI-Lernbegleiter fuer Kinder von AI-Kids. Du sprichst mit {child_name}, {child_age} Jahre alt. Passe deine Sprache dem Alter an."
+        if module:
+            system_prompt = base_prompt + "\n\n" + module["prompt"]
+        else:
+            system_prompt = base_prompt + "\nDu gibst KEINE direkten Antworten, sondern stellst Gegenfragen. Das ist das Sokrates-Prinzip."
+
+        with st.spinner("Xaino denkt..."):
+            response = client.messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=1024,
+                system=system_prompt,
+                messages=st.session_state.messages
+            )
+            answer = response.content[0].text
+
+        render_Xaino_msg(answer)
+        st.session_state.messages.append({"role": "assistant", "content": answer})
+        supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "assistant", "content": answer}).execute()
 
     # ============================================================
     # WICHTIG: Ersetze den Text in der naechsten Zeile durch DEINE
