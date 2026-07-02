@@ -555,17 +555,17 @@ def render_Xaino_msg(text):
             i += 1
         i += 1
 for message in st.session_state.messages:
-        if message["role"] == "assistant":
-            render_Xaino_msg(message["content"])
-        else:
-            with st.chat_message("user"):
-                st.markdown(message["content"])
+    if message["role"] == "assistant":
+        render_Xaino_msg(message["content"])
+    else:
+        with st.chat_message("user"):
+            st.markdown(message["content"])
 
 if prompt := st.chat_input("Stell mir eine Frage..."):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-        supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "user", "content": prompt}).execute()
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+    supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "user", "content": prompt}).execute()
 
         base_prompt = f"Du bist Xaino, ein freundlicher KI-Lernbegleiter fuer Kinder von AI-Kids. Du sprichst mit {child_name}, {child_age} Jahre alt. Passe deine Sprache dem Alter an. Halte Antworten kurz, max. 3-4 Saetze."
         if module:
