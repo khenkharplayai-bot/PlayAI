@@ -523,8 +523,7 @@ def show_chat():
         st.session_state.messages.append({"role": "assistant", "content": welcome})
         supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "assistant", "content": welcome}).execute()
 
-    def render_Xaino_msg(text):
-    # Nachricht in Text- und Code-Teile splitten
+def render_Xaino_msg(text):
     parts = re.split(r"```(\w*)\n?(.*?)```", text, flags=re.DOTALL)
 
     def bubble(content, first=False):
@@ -546,18 +545,15 @@ def show_chat():
     i = 0
     while i < len(parts):
         if i % 3 == 0:
-            # Normaler Text
             if parts[i].strip():
                 bubble(parts[i], first=first)
                 first = False
         elif i % 3 == 1:
-            # Code-Block: parts[i] = Sprache, parts[i+1] = Code
             lang = parts[i] if parts[i] else "python"
             st.code(parts[i + 1].strip("\n"), language=lang)
             first = False
             i += 1
         i += 1
-
     for message in st.session_state.messages:
         if message["role"] == "assistant":
             render_Xaino_msg(message["content"])
