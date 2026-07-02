@@ -553,8 +553,6 @@ def render_Xaino_msg(text):
             first = False
             i += 1
         i += 1
-if "messages" not in st.session_state:
-    st.session_state.messages = []
 
 for message in st.session_state.messages:
     if message["role"] == "assistant":
