@@ -554,18 +554,18 @@ def render_Xaino_msg(text):
             i += 1
         i += 1
 
-for message in st.session_state.messages:
-    if message["role"] == "assistant":
-        render_Xaino_msg(message["content"])
-    else:
+    for message in st.session_state.messages:
+        if message["role"] == "assistant":
+            render_Xaino_msg(message["content"])
+        else:
+            with st.chat_message("user"):
+                st.markdown(message["content"])
+    
+    if prompt := st.chat_input("Stell mir eine Frage..."):
+        st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
-            st.markdown(message["content"])
-
-if prompt := st.chat_input("Stell mir eine Frage..."):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
-    supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "user", "content": prompt}).execute()
+            st.markdown(prompt)
+        supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "user", "content": prompt}).execute()
 
     # ============================================================
     # WICHTIG: Ersetze den Text in der naechsten Zeile durch DEINE
