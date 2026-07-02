@@ -522,7 +522,6 @@ def show_chat():
             welcome = f"Hey {child_name}! Ich bin Xaino, dein Lernbegleiter. Was moechtest du heute lernen?"
         st.session_state.messages.append({"role": "assistant", "content": welcome})
         supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "assistant", "content": welcome}).execute()
-
 def render_Xaino_msg(text):
     parts = re.split(r"```(\w*)\n?(.*?)```", text, flags=re.DOTALL)
 
@@ -554,6 +553,7 @@ def render_Xaino_msg(text):
             first = False
             i += 1
         i += 1
+
 for message in st.session_state.messages:
     if message["role"] == "assistant":
         render_Xaino_msg(message["content"])
@@ -567,9 +567,14 @@ if prompt := st.chat_input("Stell mir eine Frage..."):
         st.markdown(prompt)
     supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "user", "content": prompt}).execute()
 
-            base_prompt = f"Du bist Xaino, ein freundlicher KI-Lernbegleiter fuer Kinder von AI-Kids. Du sprichst mit {child_name}, {child_age} Jahre alt. Passe deine Sprache dem Alter an. Halte Antworten kurz, max. 3-4 Saetze."
-            if module:
-                system_prompt = base_prompt + "\n\n" + module["prompt"]
+    # ============================================================
+    # WICHTIG: Ersetze den Text in der naechsten Zeile durch DEINE
+    # vollstaendige Original-base_prompt-Zeile (der Text hier ist
+    # evtl. gekuerzt). Die 4 Leerzeichen Einrueckung beibehalten!
+    # ============================================================
+    base_prompt = f"Du bist Xaino, ein freundlicher KI-Lernbegleiter fuer Kinder von AI-Kids. Du sprichst mit {child_name}, {child_age} Jahre alt. Passe deine Sprache dem Alter an."
+    if module:
+        system_prompt = base_prompt + "\n\n" + module["prompt"]
     else:
         system_prompt = base_prompt + "\nDu gibst KEINE direkten Antworten, sondern stellst Gegenfragen. Das ist das Sokrates-Prinzip."
 
@@ -585,6 +590,7 @@ if prompt := st.chat_input("Stell mir eine Frage..."):
     render_Xaino_msg(answer)
     st.session_state.messages.append({"role": "assistant", "content": answer})
     supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "assistant", "content": answer}).execute()
+
 # ── PASSWORD RESET ─────────────────────────────────────────────
 def show_reset_password():
     import random
