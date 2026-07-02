@@ -554,14 +554,14 @@ def render_Xaino_msg(text):
             first = False
             i += 1
         i += 1
-    for message in st.session_state.messages:
+for message in st.session_state.messages:
         if message["role"] == "assistant":
             render_Xaino_msg(message["content"])
         else:
             with st.chat_message("user"):
                 st.markdown(message["content"])
 
-    if prompt := st.chat_input("Stell mir eine Frage..."):
+if prompt := st.chat_input("Stell mir eine Frage..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
