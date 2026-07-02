@@ -524,17 +524,39 @@ def show_chat():
         supabase_admin.table("messages").insert({"session_id": st.session_state.session_id, "role": "assistant", "content": welcome}).execute()
 
     def render_Xaino_msg(text):
-        safe_text = text.replace("<", "&lt;").replace(">", "&gt;")
-        safe_text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", safe_text)
-        safe_text = safe_text.replace("\n", "<br>")
+    # Nachricht in Text- und Code-Teile splitten
+    parts = re.split(r"```(\w*)\n?(.*?)```", text, flags=re.DOTALL)
+
+    def bubble(content, first=False):
+        safe = content.replace("<", "&lt;").replace(">", "&gt;")
+        safe = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", safe)
+        safe = re.sub(r"`([^`]+)`", r"<code style='background:rgba(255,255,255,0.15);padding:2px 6px;border-radius:6px;'>\1</code>", safe)
+        safe = safe.strip().replace("\n", "<br>")
+        avatar = f'<img src="{Xaino_AVATAR}" width="48" height="48" style="border-radius:50%;flex-shrink:0;object-fit:cover;">' if first else '<div style="width:48px;flex-shrink:0;"></div>'
         st.markdown(f'''
         <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
-            <img src="{Xaino_AVATAR}" width="48" height="48" style="border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid #a855f7">
-            <div style="background:rgba(124,58,237,0.15);border:1px solid rgba(168,85,247,0.3);border-radius:12px;padding:12px 16px;color:#ffffff;font-size:16px;line-height:1.6;max-width:85%">
-                {safe_text}
+            {avatar}
+            <div style="background:rgba(124,58,237,0.15);border:1px solid rgba(168,85,247,0.3);border-radius:16px;padding:12px 16px;flex:1;">
+                {safe}
             </div>
         </div>
         ''', unsafe_allow_html=True)
+
+    first = True
+    i = 0
+    while i < len(parts):
+        if i % 3 == 0:
+            # Normaler Text
+            if parts[i].strip():
+                bubble(parts[i], first=first)
+                first = False
+        elif i % 3 == 1:
+            # Code-Block: parts[i] = Sprache, parts[i+1] = Code
+            lang = parts[i] if parts[i] else "python"
+            st.code(parts[i + 1].strip("\n"), language=lang)
+            first = False
+            i += 1
+        i += 1
 
     for message in st.session_state.messages:
         if message["role"] == "assistant":
